@@ -163,20 +163,39 @@ function say(m){m=sn(m,80).trim();if(!m)return false;if(!rlOK(RL)){toast('Espera
 const sayI=()=>{const e=$('#ci');if(say(e.value))e.value=''};
 function botSay(p,m){m=m||BP[rnd(0,7)];chatAdd(p.name,m);bc({t:'chat',n:p.name,m})}
 /* ---- Online (PeerJS, anfitrión autoritativo) ---- */
-function leaveOn(){if(ON){try{ON.peer.destroy()}catch(e){}ON=null}}
+function leaveOn(){if(ON){clearTimeout(ON.mt);try{ON.peer.destroy()}catch(e){}ON=null}}
 function okP(){if(typeof Peer=='undefined'){toast('Online no disponible aquí: sube el juego a tu hosting (Vercel)');return false}return true}
 function fail(){toast('No se pudo conectar. Online funciona al alojar el juego fuera de Claude');leaveOn();onl()}
 function onl(){leaveOn();app.innerHTML=bar(1)+`<h2>🌐 Jugar online</h2><div class="item L"><p>Juega con amigos con un código de sala (conexión directa entre navegadores). Los asientos libres los ocupan bots. Si el anfitrión sale, la sala se cierra.</p><div class="row" style="justify-content:flex-start"><button class="pri" onclick="host()">Crear sala</button></div><p>O únete con un código:</p><div class="row" style="justify-content:flex-start"><input id="rc" maxlength="5" placeholder="CÓDIGO" style="text-transform:uppercase;width:130px"><button onclick="joinR()">Unirse</button></div></div>`}
-function host(){if(!okP())return;const code=Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(0,31)]).join('');
- const pe=new Peer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0};CH=[];G=null;chatUI();
- const t=setTimeout(()=>{if(ON&&!ON.open)fail()},8000);
- pe.on('open',()=>{clearTimeout(t);ON.open=1;lobbyBcast()});pe.on('error',()=>{if(ON&&!ON.open){clearTimeout(t);fail()}});
+function host(cid,mm){if(!okP())return;const code=cid||Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(0,31)]).join('');
+ const pe=new Peer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0,mm:mm||0,mode:mm||''};CH=[];G=null;chatUI();
+ const t=setTimeout(()=>{if(ON&&ON.peer===pe&&!ON.open){if(mm)mmFail(mm);else fail()}},8000);
+ pe.on('open',()=>{clearTimeout(t);ON.open=1;lobbyBcast();if(mm)ON.mt=setTimeout(()=>{if(ON&&!ON.started)startOnline()},12000)});
+ pe.on('error',e=>{if(ON&&ON.peer===pe&&!ON.open){clearTimeout(t);if(mm){leaveOn();return e.type=='unavailable-id'?mmGo(mm):mmFail(mm)}fail()}});
  pe.on('connection',c=>{const k=[1,2,3].find(i=>!ON.conns[i]);if(!k||ON.started){c.on('open',()=>{c.send({t:'full'});setTimeout(()=>c.close(),400)});return}
   ON.conns[k]=c;c.on('data',m=>hMsg(k,m));c.on('close',()=>hLeft(k))})}
-function lobbyR(code,names,h){app.innerHTML=bar(1)+`<h2>Sala ${code}</h2><div class="item L"><p>Comparte este código. Los asientos libres serán bots.</p>${names.map((n,i)=>`<div class="set"><span>Asiento ${i+1}: ${n?sn(n):'<i>libre (bot)</i>'}</span></div>`).join('')}</div>${h?'<div class="row"><button class="pri" onclick="startOnline()">▶ Empezar partida</button></div>':'<div class="sub">Esperando a que el anfitrión empiece…</div>'}`}
+const MMK=8;
+function mmFail(mode){leaveOn();toast('Sin conexión online: jugarás contra bots');start(mode)}
+function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pre+String(n).padStart(3,'0');let pe;try{pe=new Peer()}catch(e){return mmFail(mode)}
+ ON={role:'c',peer:pe,mm:mode};CH=[];G=null;chatUI();
+ app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:380px;margin:auto"><div style="font-size:2.5rem">🔎</div><p>Buscando jugadores reales… si no hay, te acompañarán bots.</p><button onclick="menu()">Cancelar</button></div>`;
+ let cur=null;const dead=()=>!ON||ON.peer!==pe;
+ const t0=setTimeout(()=>{if(!dead()&&!pe.open)mmFail(mode)},8000);
+ pe.on('error',e=>{if(dead())return;if(e.type=='peer-unavailable'){cur&&cur('none')}else if(!ON.open)mmFail(mode)});
+ pe.on('open',()=>{clearTimeout(t0);try1()});
+ function try1(){if(dead())return;if(slot>MMK){slot=1;return setTimeout(try1,2500)}
+  const c=pe.connect('remigio-'+code(slot),{reliable:true});let d=0;
+  const fin=r=>{if(d||dead())return;d=1;clearTimeout(to);cur=null;
+   if(r=='open'){c.on('data',m=>{if(dead())return;if(m&&m.t=='full'){try{c.close()}catch(e){}slot++;ON.conn=null;try1()}else cMsg(m)});
+    c.on('close',()=>{if(ON&&ON.peer===pe&&ON.conn===c&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}});
+    ON.conn=c;ON.open=1;ON.code=code(slot);c.send({t:'join',p:me()})}
+   else{try{c.close()}catch(e){}claim()}};
+  const to=setTimeout(()=>fin('none'),4000);cur=fin;c.on('open',()=>fin('open'))}
+ function claim(){if(dead())return;const s=slot;leaveOn();host(code(s),mode)}}
+function lobbyR(code,names,h){const pub=/^M[RQ]\d{3}$/.test(code);app.innerHTML=bar(1)+`<h2>${pub?'Buscando jugadores…':'Sala '+code}</h2><div class="item L"><p>${pub?'La partida empezará en unos segundos. Los asientos libres serán bots.':'Comparte este código. Los asientos libres serán bots.'}</p>${names.map((n,i)=>`<div class="set"><span>Asiento ${i+1}: ${n?sn(n):'<i>libre (bot)</i>'}</span></div>`).join('')}</div>${pub?'':h?'<div class="row"><button class="pri" onclick="startOnline()">▶ Empezar partida</button></div>':'<div class="sub">Esperando a que el anfitrión empiece…</div>'}`}
 function lobbyBcast(){const names=ON.info.map((x,k)=>x&&(k==0||ON.conns[k])?x.name:'');lobbyR(ON.code,names,1);bc({t:'lobby',code:ON.code,names})}
 function hMsg(k,m){if(!m||typeof m!='object')return;
- if(m.t=='join'&&!ON.started){const p=m.p||{};ON.info[k]={name:sn(p.name)||'Jugador',title:sn(p.title),av:AV.includes(p.av)?p.av:'🦊',deck:dk(p.deck)?p.deck:'std',wins:+p.wins||0};lobbyBcast()}
+ if(m.t=='join'&&!ON.started){const p=m.p||{};ON.info[k]={name:sn(p.name)||'Jugador',title:sn(p.title),av:AV.includes(p.av)?p.av:'🦊',deck:dk(p.deck)?p.deck:'std',wins:+p.wins||0};lobbyBcast();if(ON.mm&&ON.info.filter((x,j)=>x&&(j==0||ON.conns[j])).length>=4){clearTimeout(ON.mt);setTimeout(()=>{if(ON&&!ON.started)startOnline()},1500)}}
  else if(m.t=='chat'){if(!rlOK((ON.rl=ON.rl||[{},{},{},{}])[k]))return;const mm=sn(m.m,80);const n=ON.info[k]?ON.info[k].name:'Jugador';if(mm){chatAdd(n,mm);bc({t:'chat',n,m:mm})}}
  else if(G&&!G.over)hAct(k,m)}
 function hAct(pi,m){if(G.turn!=pi)return;const p=G.pl[pi];
@@ -184,8 +203,8 @@ function hAct(pi,m){if(G.turn!=pi)return;const p=G.pl[pi];
  else if(m.t=='disc'&&G.ph=='disc'){const i=p.hand.findIndex(c=>c.id==m.id);if(i>=0)discard(pi,i)}}
 function hLeft(k){if(!ON)return;ON.conns[k]=null;if(!G||G.over||!ON.started){ON.info[k]=null;if(!ON.started)lobbyBcast();return}
  const p=G.pl[k];p.remote=0;p.bot=1;p.lvl=2;p.name+=' (bot)';chatAdd(p.name,'se ha desconectado');table();if(G.turn==k){if(G.ph=='disc')setTimeout(()=>discard(k,bestDisc(p.hand,2).i),900);else next()}}
-function startOnline(){ON.started=1;ON.sendIntro=1;start('online')}
-function view(k){const R=a=>a.map((_,j)=>a[(k+j)%4]);return {mode:'online',turn:(G.turn-k+4)%4,ph:G.ph,over:G.over,dc:G.draw.length,top:G.disc[G.disc.length-1]||null,tc:R(G.tc),rem:Math.max(0,(G.dl||0)-Date.now()),pl:R(G.pl).map((p,j)=>({name:p.name,title:p.title,av:p.av,deck:p.deck,wins:p.wins,hand:j==0?p.hand:p.hand.map(()=>({s:9,v:0}))}))}}
+function startOnline(){clearTimeout(ON.mt);ON.started=1;ON.sendIntro=1;start(ON.mode||'online')}
+function view(k){const R=a=>a.map((_,j)=>a[(k+j)%4]);return {mode:G.mode,turn:(G.turn-k+4)%4,ph:G.ph,over:G.over,dc:G.draw.length,top:G.disc[G.disc.length-1]||null,tc:R(G.tc),rem:Math.max(0,(G.dl||0)-Date.now()),pl:R(G.pl).map((p,j)=>({name:p.name,title:p.title,av:p.av,deck:p.deck,wins:p.wins,hand:j==0?p.hand:p.hand.map(()=>({s:9,v:0}))}))}}
 function bcast(){if(!ON||!ON.conns||!G)return;ON.conns.forEach((c,k)=>{if(c&&c.open){const m={t:'state',v:view(k)};if(ON.sendIntro)m.intro=1;c.send(m)}});ON.sendIntro=0}
 function joinR(){if(!okP())return;const code=($('#rc').value||'').trim().toUpperCase();if(code.length!=5)return toast('El código tiene 5 caracteres');
  const pe=new Peer();ON={role:'c',peer:pe,code};CH=[];G=null;chatUI();app.innerHTML=bar(1)+'<div class="sub">Conectando…</div>';
@@ -280,13 +299,13 @@ const ev=(h,l)=>cover(h)*10+(l==2?pot(h):0);
 function bestDisc(h,l){let best=-1,bi=[];h.forEach((c,i)=>{const r=h.filter((_,k)=>k!=i),e=ev(r,l);if(e>best){best=e;bi=[i]}else if(e==best)bi.push(i)});return {i:bi[rnd(0,bi.length-1)],e:best}}
 /* ---------- Partida ---------- */
 let G=null;
-function search(mode){let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:360px;margin:auto"><div style="font-size:3rem" id="tm">8</div><div>Jugadores humanos: 1/4</div><br><button onclick="clearInterval(window.ti);menu()">Cancelar</button></div>`;
+function search(mode){if(typeof Peer!='undefined')return mmGo(mode);let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:360px;margin:auto"><div style="font-size:3rem" id="tm">8</div><div>Jugadores humanos: 1/4</div><br><button onclick="clearInterval(window.ti);menu()">Cancelar</button></div>`;
  window.ti=setInterval(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0){clearInterval(window.ti);start(mode)}},1000)}
 function start(mode){const names=['Lucía','Marc','Núria','Pau','Jordi','Alba','Biel','Carla','Òscar','Mireia'];let u=names.sort(()=>Math.random()-.5);
  const pl=[{name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins,bot:0,hand:[]}];
  for(let i=1;i<4;i++)pl.push({name:u[i]+' (bot)',title:Math.random()<.6?['Veterano','Jugón','Aprendiz','Maestro de Mesa','Comodinero'][rnd(0,4)]:'',av:AV[rnd(0,7)],deck:DECKS[rnd(0,DECKS.length-1)].id,wins:rnd(0,300),bot:1,lvl:Math.random()<.65?1:2,hand:[]});
  let d=[];for(let s=0;s<4;s++)for(let v=1;v<=10;v++)d.push({s,v,id:d.length});for(let i=0;i<4;i++)d.push({s:-1,v:0,id:d.length});d.sort(()=>Math.random()-.5);
- if(mode=='online')for(let i=1;i<4;i++)if(ON.conns[i]&&ON.info[i])pl[i]=Object.assign({},ON.info[i],{bot:0,remote:1,hand:[]});
+ if(ON&&ON.role=='h')for(let i=1;i<4;i++)if(ON.conns[i]&&ON.info[i])pl[i]=Object.assign({},ON.info[i],{bot:0,remote:1,hand:[]});
  pl.forEach(p=>{p.hand=d.splice(0,10)});G={mode,pl,draw:d,disc:[d.pop()],turn:0,ph:'draw',sel:null,over:false,tc:[0,0,0,0]};if(!ON){CH=[];chatUI()}vs()}
 const sortH=h=>h.sort((a,b)=>(a.s<0)-(b.s<0)||a.s-b.s||a.v-b.v);
 function vs(){if(!S.set.vs){sortH(G.pl[0].hand);table();next();return}const rc=mode=>G.mode=='rank'?rank()[1]:'#1f4f9a',col=rc();sortH(G.pl[0].hand);
@@ -328,7 +347,7 @@ function end(w){G.over=true;clearTimeout(G.tt);if(ON&&ON.role=='h')ON.conns.forE
 function finish(w){const ranked=G.mode=='rank',won=w==0;let info='';S.games++;mission('play');
  if(won){S.wins++;S.coins+=2;mission('win');info='+2 🪙';if(G.pl[0].hand.some(c=>c.s<0))mission('joker')}
  if(ranked){const real=S.pts>=600;if(won){const d=real?10:rnd(10,20);S.pts+=d;info+=` · +${d} pts`}else{const d=real?5:rnd(3,5);S.pts=Math.max(0,S.pts-d);info+=` · −${d} pts`}}
- if(w>=0)snd(won?'win':'lose');if(ranked){mev('ranked');if(won)mev('rwin')}if(G.mode=='online')mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
+ if(w>=0)snd(won?'win':'lose');if(ranked){mev('ranked');if(won)mev('rwin')}if(ON)mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="box"><h2>${w<0?'Has abandonado':won?'🎉 ¡Has ganado!':'Gana '+G.pl[w].name}</h2>${w>=0?`<div class="hand" style="padding-top:6px">${sortH(G.pl[w].hand).map(c=>cardH(c,'',G.pl[0].deck)).join('')}</div>`:''}<p>${info||'Sin recompensa'}</p><button class="pri" onclick="this.closest('.ov').remove();menu()">Volver al menú</button></div>`;
  document.body.appendChild(o);if(w>=0)table()}
 ap();rollSeason();menu();if(!S.tut)tut(0);
