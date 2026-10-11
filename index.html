@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><title>Remigio</title>
+<html lang="es"><head><meta charset="utf-8"><title>Superremigio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
 :root{--bg:#0f2219;--pn:#1b4733;--pn2:#143427;--gold:#f2c94c;--tx:#f4f1e8;--mut:#9fb5a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
@@ -75,6 +75,10 @@ textarea{width:100%;font:12px monospace;padding:8px;border-radius:8px;border:1px
 #cp{display:none;position:absolute;bottom:54px;right:0;width:270px;background:#0b1d15f5;border:1px solid var(--gold);border-radius:12px;padding:8px}
 #cp.open{display:block}#cl{height:130px;overflow:auto;font-size:12px}
 .qp{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.qp button{padding:3px 7px;font-size:12px}.cf{display:flex;gap:4px}.cf input{flex:1;min-width:0}
+.logo{font-size:clamp(1.4rem,7vw,2.8rem);letter-spacing:3px}
+.tabs{display:flex;gap:6px;margin:8px 0}.tabs button{flex:1;padding:9px 4px}.tabs button.on{background:var(--gold);color:#222;font-weight:700}
+.mq{display:flex;gap:10px;align-items:center;background:linear-gradient(#173a2b,#10281e);border:1px solid #2f6a5088;border-radius:12px;padding:10px;margin-bottom:8px}.mq.dn{opacity:.55}
+.bdg{background:#e53935;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:6px}
 </style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="app"></div>
 <script>
 const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','S','C','R'];
@@ -101,7 +105,7 @@ mk('cam','Campeón','X','linear-gradient(135deg,#c77dff,#4a1a8a)','🏆','linear
 mk('real','Corona Real','X','linear-gradient(135deg,#ff5c5c,#6b0f1a)','👑','linear-gradient(135deg,#fff6d6,#ffd9a0,#fff6d6)','#ff5c5c','#6b0f1a',['#7a5a00','#b3122a','#1a3c7a','#14532d'],['👑','💎','⚜️','🏵️'],{leg:1})];
 const MIS=[{k:'play',g:3,c:2,t:'Diaria: juega 3 partidas'},{k:'win',g:1,c:3,t:'Diaria: gana 1 partida'},{k:'win',g:10,c:15,t:'Semanal: gana 10 partidas'},{k:'joker',g:1,c:5,t:'Logro: cierra usando un comodín'},{k:'win',g:50,c:25,t:'Logro: 50 victorias'}];
 const AV=['🦊','🐻','🦁','🐼','🐸','🦉','🐙','🐲'];
-const DEF=()=>({name:'Jugador',av:0,coins:20,wins:0,games:0,pts:0,owned:['std','azul'],deck:'std',m:{play:0,win:0,joker:0},done:[],season:null,best:-1,hist:{},titles:[],title:'',streak:0,bs:0,set:{speed:1,vs:1,auto:0,size:1,conf:1}});
+const DEF=()=>({name:'Jugador',av:0,coins:20,wins:0,games:0,pts:0,owned:['std','azul'],deck:'std',m:{play:0,win:0,joker:0},done:[],season:null,best:-1,hist:{},titles:[],title:'',streak:0,bs:0,set:{speed:1,vs:1,auto:0,size:1,conf:1},mq:{}});
 let S=DEF();
 try{const x=JSON.parse(localStorage.getItem('remigio'));if(x)S=Object.assign(S,x)}catch(e){}
 S.set=Object.assign(DEF().set,S.set);
@@ -119,7 +123,7 @@ function rollSeason(){const c=curSeason();if(S.season==null){S.season=c;return}
 const TT=[{id:'w1',n:'Principiante',d:'Gana 1 partida',ok:()=>S.wins>=1},{id:'w10',n:'Aprendiz',d:'Gana 10 partidas',ok:()=>S.wins>=10},{id:'w100',n:'Veterano',d:'Gana 100 partidas',ok:()=>S.wins>=100},{id:'w500',n:'Maestro de Mesa',d:'Gana 500 partidas',ok:()=>S.wins>=500},{id:'w1000',n:'Leyenda del Remigio',d:'Gana 1000 partidas',ok:()=>S.wins>=1000},
 {id:'g50',n:'Jugón',d:'Juega 50 partidas',ok:()=>S.games>=50},{id:'jk',n:'Comodinero',d:'Cierra con comodín 10 veces',ok:()=>S.m.joker>=10},{id:'st5',n:'Imparable',d:'Racha de 5 victorias',ok:()=>S.bs>=5},
 {id:'c5',n:'Coleccionista',d:'Consigue 5 barajas',ok:()=>S.owned.length>=5},{id:'c10',n:'Gran Coleccionista',d:'Consigue 10 barajas',ok:()=>S.owned.length>=10},{id:'hal',n:'Cazador de Calabazas',d:'Consigue la baraja de Halloween',ok:()=>S.owned.includes('hal')},{id:'real',n:'Soberano',d:'Consigue la Corona Real',ok:()=>S.owned.includes('real')}];
-function tn(id){const t=TT.find(x=>x.id==id);if(t)return t.n;const m=id.match(/^r(\d+)_(\d)$/);return m?RANKS[+m[2]][0]+' · T'+m[1]:id}
+function tn(id){const t=TT.find(x=>x.id==id);if(t)return t.n;const q=id.match(/^ms(\d+)$/);if(q)return 'Misionero · T'+q[1];const m=id.match(/^r(\d+)_(\d)$/);return m?RANKS[+m[2]][0]+' · T'+m[1]:id}
 function addT(id){if(!S.titles.includes(id)){S.titles.push(id);toast('Nuevo título: '+tn(id))}}
 const chk=()=>TT.forEach(t=>{if(t.ok())addT(t.id)});
 function awardRanks(){const i=Math.min(6,Math.floor(S.pts/100));for(let k=S.best+1;k<=i;k++){addT('r'+S.season+'_'+k);if(k==5&&!S.owned.includes('cam')){S.owned.push('cam');toast('¡Baraja Campeón desbloqueada!')}if(k==6&&!S.owned.includes('real')){S.owned.push('real');toast('¡Baraja Corona Real desbloqueada!')}}S.best=Math.max(S.best,i)}
@@ -145,8 +149,12 @@ const bc=o=>ON&&ON.role=='h'&&ON.conns.forEach(c=>c&&c.open&&c.send(o));
 function chatUI(){if($('#chat'))return;const d=document.createElement('div');d.id='chat';d.innerHTML=`<button id="cb" onclick="$('#cp').classList.toggle('open');unread=0;chatR()">💬<b id="cn"></b></button><div id="cp"><div id="cl"></div><div class="qp">${QP.map(q=>`<button onclick="say('${q}')">${q}</button>`).join('')}</div><div class="cf"><input id="ci" maxlength="80" placeholder="Escribe…" onkeydown="if(event.key=='Enter')sayI()"><button onclick="sayI()">➤</button></div></div>`;document.body.appendChild(d);chatR()}
 function chatR(){const l=$('#cl');if(!l)return;l.innerHTML=CH.slice(-30).map(x=>`<div><b style="color:var(--gold)">${esc(x.n)}:</b> ${esc(x.m)}</div>`).join('');l.scrollTop=1e9;$('#cn').textContent=unread||''}
 function chatAdd(n,m){CH.push({n,m});if(!$('#cp')||!$('#cp').classList.contains('open')){if(n!=S.name){unread++;toast(n+': '+m)}}chatR()}
-function say(m){m=sn(m,80).trim();if(!m)return;if(ON){if(ON.role=='h'){chatAdd(S.name,m);bc({t:'chat',n:S.name,m})}else if(ON.conn&&ON.conn.open)ON.conn.send({t:'chat',m})}else{chatAdd(S.name,m);if(G&&!G.over&&Math.random()<.5){const b=G.pl[rnd(1,3)];setTimeout(()=>chatAdd(b.name,BP[rnd(0,7)]),rnd(900,2200))}}}
-const sayI=()=>{const e=$('#ci');say(e.value);e.value=''};
+const RL={n:0,until:0,last:0};
+function rlOK(o){const t=Date.now();o.n=o.n||0;o.until=o.until||0;if(t<o.until)return false;if(t-(o.last||0)>20000)o.n=0;o.last=t;o.n++;if(o.n>=5){o.until=t+15000;o.n=0;if(o===RL)cdUI()}return true}
+function cdUI(){const tk=()=>{const e=$('#ci');if(!e)return;const r=Math.ceil((RL.until-Date.now())/1000);document.querySelectorAll('#cp button').forEach(b=>b.disabled=r>0);e.disabled=r>0;e.placeholder=r>0?'Espera '+r+' s…':'Escribe…';if(r>0)setTimeout(tk,500)};tk()}
+function say(m){m=sn(m,80).trim();if(!m)return false;if(!rlOK(RL)){toast('Espera '+Math.ceil((RL.until-Date.now())/1000)+' s para volver a escribir');return false}
+ if(ON){if(ON.role=='h'){chatAdd(S.name,m);bc({t:'chat',n:S.name,m})}else if(ON.conn&&ON.conn.open)ON.conn.send({t:'chat',m})}else{chatAdd(S.name,m);if(G&&!G.over&&Math.random()<.5){const b=G.pl[rnd(1,3)];setTimeout(()=>chatAdd(b.name,BP[rnd(0,7)]),rnd(900,2200))}}return true}
+const sayI=()=>{const e=$('#ci');if(say(e.value))e.value=''};
 function botSay(p,m){m=m||BP[rnd(0,7)];chatAdd(p.name,m);bc({t:'chat',n:p.name,m})}
 /* ---- Online (PeerJS, anfitrión autoritativo) ---- */
 function leaveOn(){if(ON){try{ON.peer.destroy()}catch(e){}ON=null}}
@@ -163,7 +171,7 @@ function lobbyR(code,names,h){app.innerHTML=bar(1)+`<h2>Sala ${code}</h2><div cl
 function lobbyBcast(){const names=ON.info.map((x,k)=>x&&(k==0||ON.conns[k])?x.name:'');lobbyR(ON.code,names,1);bc({t:'lobby',code:ON.code,names})}
 function hMsg(k,m){if(!m||typeof m!='object')return;
  if(m.t=='join'&&!ON.started){const p=m.p||{};ON.info[k]={name:sn(p.name)||'Jugador',title:sn(p.title),av:AV.includes(p.av)?p.av:'🦊',deck:dk(p.deck)?p.deck:'std',wins:+p.wins||0};lobbyBcast()}
- else if(m.t=='chat'){const mm=sn(m.m,80);const n=ON.info[k]?ON.info[k].name:'Jugador';if(mm){chatAdd(n,mm);bc({t:'chat',n,m:mm})}}
+ else if(m.t=='chat'){if(!rlOK((ON.rl=ON.rl||[{},{},{},{}])[k]))return;const mm=sn(m.m,80);const n=ON.info[k]?ON.info[k].name:'Jugador';if(mm){chatAdd(n,mm);bc({t:'chat',n,m:mm})}}
  else if(G&&!G.over)hAct(k,m)}
 function hAct(pi,m){if(G.turn!=pi)return;const p=G.pl[pi];
  if(m.t=='draw'&&G.ph=='draw'){take(p,m.src=='p'?'p':'d');G.ph='disc';table()}
@@ -189,14 +197,29 @@ function cState(m){const v=m.v;if(!v||!Array.isArray(v.pl)||v.pl.length!=4)retur
  if(old){const ix=new Map(old.map((c,i)=>[c.id,i]));v.pl[0].hand.sort((a,b)=>(ix.has(a.id)?ix.get(a.id):99)-(ix.has(b.id)?ix.get(b.id):99))}
  v.draw=new Array(v.dc|0).fill(0);v.disc=v.top?[v.top]:[];v.sel=sid==null?null:v.pl[0].hand.findIndex(c=>c.id==sid);if(v.sel<0)v.sel=null;
  G=v;if(m.intro)vs();else table()}
-function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();app.innerHTML=`<div class="logo">REMIGIO</div><div class="sub">Baraja española · 40 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
+const MQ={d:[['Juega 3 partidas','play',3,2],['Gana 1 partida','win',1,3],['Cierra con un comodín','joker',1,4],['Juega 1 partida clasificatoria','ranked',1,3]],
+w:[['Gana 10 partidas','win',10,15],['Juega 25 partidas','play',25,12],['Cierra con comodín 3 veces','joker',3,10],['Gana 3 clasificatorias','rwin',3,20],['Juega 3 partidas online','online',3,15]],
+s:[['Gana 60 partidas','win',60,50],['Juega 100 partidas','play',100,40],['Gana 20 clasificatorias','rwin',20,80],['Cierra con comodín 20 veces','joker',20,50],['Juega 25 partidas online','online',25,60]]};
+const wkey=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()-(d.getDay()+6)%7).toLocaleDateString('sv')};
+function mqRoll(){S.mq=S.mq||{};const k={d:new Date().toLocaleDateString('sv'),w:wkey(),s:String(S.season)};for(const sc of ['d','w','s'])if(!S.mq[sc]||S.mq[sc].key!==k[sc])S.mq[sc]={key:k[sc],p:{},c:[]}}
+function mev(k,n=1){mqRoll();for(const sc of ['d','w','s'])S.mq[sc].p[k]=(S.mq[sc].p[k]||0)+n}
+const claimable=()=>['d','w','s'].reduce((a,sc)=>a+MQ[sc].filter((m,i)=>(S.mq[sc].p[m[1]]||0)>=m[2]&&!S.mq[sc].c.includes(i)).length,0);
+function tl(sc){const n=new Date();if(sc=='d')return 'Se reinicia en '+Math.ceil((new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n)/36e5)+' h';if(sc=='w'){const d=7-(n.getDay()+6)%7;return 'Se reinicia en '+d+' día'+(d>1?'s':'')}return 'La temporada termina en '+daysLeft()+' días'}
+let MT='d';
+function missions(t){if(typeof t=='string')MT=t;mqRoll();const o=S.mq[MT],L=MQ[MT],nm={d:'Diarias',w:'Semanales',s:'Temporada '+S.season},done=o.c.length,any=L.some((m,i)=>(o.p[m[1]]||0)>=m[2]&&!o.c.includes(i));
+ app.innerHTML=bar(1)+`<h2>📋 Misiones</h2><div class="tabs">${['d','w','s'].map(x=>`<button class="${MT==x?'on':''}" onclick="missions('${x}')">${nm[x]}</button>`).join('')}</div><div class="sub">${tl(MT)} · ${done}/${L.length} reclamadas</div>
+ ${L.map((m,i)=>{const p=Math.min(o.p[m[1]]||0,m[2]),ok=p>=m[2],c=o.c.includes(i);return `<div class="mq${c?' dn':''}"><div style="flex:1"><b>${m[0]}</b><div class="prog" style="margin:6px 0"><i style="width:${p/m[2]*100}%"></i></div><small>${p}/${m[2]}</small></div><button class="${ok&&!c?'pri':''}" ${ok&&!c?'':'disabled'} onclick="claim('${MT}',${i})">${c?'✔ Reclamada':'+'+m[3]+' 🪙'}</button></div>`}).join('')}
+ <div class="row"><button class="pri" ${any?'':'disabled'} onclick="claimAll()">Reclamar todo</button></div>${MT=='s'?'<p class="sub">Reclama las 5 misiones de temporada para conseguir el título «Misionero».</p>':''}`}
+function claim(sc,i,q){const o=S.mq[sc],m=MQ[sc][i];if(!m||o.c.includes(i)||(o.p[m[1]]||0)<m[2])return;o.c.push(i);S.coins+=m[3];if(sc=='s'&&o.c.length==MQ.s.length)addT('ms'+S.season);save();if(!q){toast('+'+m[3]+' 🪙');missions()}}
+function claimAll(){let t=0;MQ[MT].forEach((m,i)=>{const o=S.mq[MT];if(!o.c.includes(i)&&(o.p[m[1]]||0)>=m[2]){t+=m[3];claim(MT,i,1)}});toast('+'+t+' 🪙');missions()}
+function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 40 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
 <div class="tiles"><button class="tile big pri" onclick="search('quick')"><b>⚡ Partida Rápida</b><small>4 jugadores · sin rango</small></button><button class="tile big" onclick="search('rank')"><b>🏅 Clasificatoria</b><small>Temporada ${S.season} · quedan ${daysLeft()} días</small></button>
-<button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="rules()"><b>📖 Reglas</b></button></div>`}
+<button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="rules()"><b>📖 Reglas</b></button></div>`}
 function rules(){app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Reglas</h2><p>Cada jugador recibe <b>10 cartas</b>. En tu turno <b>robas 1</b> (mazo o pozo) y <b>descartas 1</b>.</p><p><b>Cierras</b> cuando, al descartar, las 10 cartas restantes están en grupos de mínimo 3 (ej. 3-3-4):</p><ul><li><b>Trío/Cuarteto:</b> mismo número, palos distintos.</li><li><b>Escalera:</b> 3+ cartas consecutivas del mismo palo (1-7, Sota, Caballo, Rey). El 1 es el más bajo.</li><li><b>Comodín 🃏:</b> sustituye cualquier carta; máximo 1 por grupo.</li></ul><p>S = Sota, C = Caballo, R = Rey. Gana la primera persona que cierre. Victoria: +2 monedas.</p></div>`}
 function profile(){const r=rank();app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Perfil</h2><div class="row" style="justify-content:flex-start"><button onclick="S.av=(S.av+1)%AV.length;save();profile()" style="font-size:2rem">${AV[S.av]}</button><input value="${S.name}" maxlength="14" onchange="S.name=this.value||'Jugador';save();profile()"></div>
 <p>Partidas: ${S.games} · Victorias: ${S.wins} · Mejor racha: ${S.bs}</p><p>Temporada ${S.season} (quedan ${daysLeft()} días)</p><p style="font-size:12px">${Object.entries(S.hist).map(([k,v])=>'T'+k+': '+RANKS[v][0]).join(' · ')}</p><p style="color:${r[1]}">Rango: ${r[0]} (${S.pts} pts)</p><div class="prog"><i style="width:${S.pts%100}%"></i></div>
-<h2>Misiones y logros</h2>${MIS.map((m,i)=>`<p>${S.done.includes(i)?'✅':'⬜'} ${m.t} <small>(${Math.min(S.m[m.k],m.g)}/${m.g}) · +${m.c} 🪙</small></p>`).join('')}</div>`}
-function mission(k){S.m[k]++;MIS.forEach((m,i)=>{if(m.k===k&&S.m[k]>=m.g&&!S.done.includes(i)){S.done.push(i);S.coins+=m.c;toast('Misión: +'+m.c+' 🪙')}})}
+<button class="pri" onclick="missions()">📋 Ver misiones</button></div>`}
+function mission(k){S.m[k]=(S.m[k]||0)+1;mev(k)}
 const pv=id=>`<div class="pv">${back(id)}${cardH({s:0,v:7},'',id)}</div>`;
 const back=(d,c='')=>`<div class="card back ${c}" style="background:${dk(d).bg}"><i>${dk(d).em}</i></div>`;
 function decks(){app.innerHTML=bar(1)+`<h2>Edición de mazo</h2><div class="grid">${DECKS.filter(d=>S.owned.includes(d.id)).map(d=>`<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><br><button ${S.deck===d.id?'disabled':''} onclick="S.deck='${d.id}';save();decks()" style="margin-top:6px">${S.deck===d.id?'Equipado':'Equipar'}</button></div>`).join('')}</div>`}
@@ -225,7 +248,7 @@ function search(mode){let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div cl
  window.ti=setInterval(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0){clearInterval(window.ti);start(mode)}},1000)}
 function start(mode){const names=['Lucía','Marc','Núria','Pau','Jordi','Alba','Biel','Carla','Òscar','Mireia'];let u=names.sort(()=>Math.random()-.5);
  const pl=[{name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins,bot:0,hand:[]}];
- for(let i=1;i<4;i++)pl.push({name:u[i]+' (bot)',title:Math.random()<.6?['Veterano','Jugón','Aprendiz','Maestro de Mesa','Comodinero'][rnd(0,4)]:'',av:AV[rnd(0,7)],deck:DECKS[rnd(0,DECKS.length-1)].id,wins:rnd(0,300),bot:1,lvl:Math.random()<.3?1:2,hand:[]});
+ for(let i=1;i<4;i++)pl.push({name:u[i]+' (bot)',title:Math.random()<.6?['Veterano','Jugón','Aprendiz','Maestro de Mesa','Comodinero'][rnd(0,4)]:'',av:AV[rnd(0,7)],deck:DECKS[rnd(0,DECKS.length-1)].id,wins:rnd(0,300),bot:1,lvl:Math.random()<.65?1:2,hand:[]});
  let d=[];for(let s=0;s<4;s++)for(let v=1;v<=10;v++)d.push({s,v,id:d.length});for(let i=0;i<4;i++)d.push({s:-1,v:0,id:d.length});d.sort(()=>Math.random()-.5);
  if(mode=='online')for(let i=1;i<4;i++)if(ON.conns[i]&&ON.info[i])pl[i]=Object.assign({},ON.info[i],{bot:0,remote:1,hand:[]});
  pl.forEach(p=>{p.hand=d.splice(0,10)});G={mode,pl,draw:d,disc:[d.pop()],turn:0,ph:'draw',sel:null,over:false,tc:[0,0,0,0]};if(!ON){CH=[];chatUI()}vs()}
@@ -259,16 +282,17 @@ function doDraw(src){if(G.over||G.turn!=0||G.ph!='draw')return;if(ON&&ON.role=='
 function doDiscard(){if(G.sel==null||G.over||G.turn!=0||G.ph!='disc')return;if(ON&&ON.role=='c'){ON.conn.send({t:'disc',id:G.pl[0].hand[G.sel].id});G.sel=null;return}discard(0,G.sel)}
 function discard(pi,i){const p=G.pl[pi],c=p.hand.splice(i,1)[0];c.d=p.deck;if(G.tc[pi]>=1&&p.hand.length==10&&cover(p.hand)==10){G.disc.push(c);return end(pi)}
  G.disc.push(c);G.tc[pi]++;if(p.bot&&Math.random()<.06)botSay(p);G.turn=(pi+1)%4;G.ph='draw';if(pi==0)G.sel=null;table();next()}
+function botDisc(p){const b=bestDisc(p.hand,p.lvl),m=p.lvl==1?.35:.12;return Math.random()<(b.e>=100?m*1.5:m)?rnd(0,p.hand.length-1):b.i}
 function next(){if(G.over||G.turn==0||(ON&&ON.role=='c'))return;const p=G.pl[G.turn];if(p.remote)return;setTimeout(()=>{if(G.over)return;
  const top=G.disc[G.disc.length-1],b=ev(p.hand,p.lvl);let useD=false;
- if(top){const h2=p.hand.concat(top);useD=p.lvl==1?bestDisc(h2,1).e>cover(p.hand)*10:bestDisc(h2,2).e>b+2}
- take(p,useD?'p':'d');table();setTimeout(()=>{if(G.over)return;discard(G.turn,bestDisc(p.hand,p.lvl).i)},rnd(1500,3500)*S.set.speed)},rnd(1500,3500)*S.set.speed)}
+ if(top){const h2=p.hand.concat(top);useD=(p.lvl==1?bestDisc(h2,1).e>cover(p.hand)*10:bestDisc(h2,2).e>b+4)&&Math.random()>.2}
+ take(p,useD?'p':'d');table();setTimeout(()=>{if(G.over)return;discard(G.turn,botDisc(p))},rnd(1500,3500)*S.set.speed)},rnd(1500,3500)*S.set.speed)}
 function quit(){G.over=true;finish(-1)}
 function end(w){G.over=true;if(ON&&ON.role=='h')ON.conns.forEach((c,k)=>c&&c.open&&c.send({t:'end',w:(w-k+4)%4,hand:G.pl[w].hand}));G.pl.forEach(p=>{if(p.bot&&Math.random()<.5)setTimeout(()=>botSay(p,'GG'),rnd(600,2000))});finish(w)}
 function finish(w){const ranked=G.mode=='rank',won=w==0;let info='';S.games++;mission('play');
  if(won){S.wins++;S.coins+=2;mission('win');info='+2 🪙';if(G.pl[0].hand.some(c=>c.s<0))mission('joker')}
  if(ranked){const real=S.pts>=600;if(won){const d=real?10:rnd(10,20);S.pts+=d;info+=` · +${d} pts`}else{const d=real?5:rnd(3,5);S.pts=Math.max(0,S.pts-d);info+=` · −${d} pts`}}
- S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
+ if(ranked){mev('ranked');if(won)mev('rwin')}if(G.mode=='online')mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="box"><h2>${w<0?'Has abandonado':won?'🎉 ¡Has ganado!':'Gana '+G.pl[w].name}</h2>${w>=0?`<div class="hand" style="padding-top:6px">${sortH(G.pl[w].hand).map(c=>cardH(c,'',G.pl[w].deck)).join('')}</div>`:''}<p>${info||'Sin recompensa'}</p><button class="pri" onclick="this.closest('.ov').remove();menu()">Volver al menú</button></div>`;
  document.body.appendChild(o);if(w>=0)table()}
 ap();rollSeason();menu();
