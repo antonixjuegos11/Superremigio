@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><title>Superremigio</title>
+<html lang="es"><head><meta charset="utf-8"><title>Superremigio</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%2314402e'/%3E%3Cg%20transform='rotate%28-14%2032%2036%29'%3E%3Crect%20x='13'%20y='12'%20width='26'%20height='38'%20rx='4'%20fill='%23d9d2b8'/%3E%3C/g%3E%3Cg%20transform='rotate%2812%2032%2036%29'%3E%3Crect%20x='24'%20y='12'%20width='26'%20height='38'%20rx='4'%20fill='%23fbf7ea'%20stroke='%23c9961a'%20stroke-width='2'/%3E%3Ccircle%20cx='37'%20cy='31'%20r='7.5'%20fill='%23f2c94c'%20stroke='%23b8860b'%20stroke-width='2'/%3E%3C/g%3E%3C/svg%3E"><meta name="theme-color" content="#0f2219">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
 :root{--bg:#0f2219;--pn:#1b4733;--pn2:#143427;--gold:#f2c94c;--tx:#f4f1e8;--mut:#9fb5a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
@@ -87,7 +87,7 @@ textarea{width:100%;font:12px monospace;padding:8px;border-radius:8px;border:1px
 .leg2{font-size:11px;color:#d7e5dc;text-align:center;margin-top:8px}
 </style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="app"></div>
 <script>
-const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','S','C','R'];
+const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','8','9','S','C','R'];
 const RANKS=[['Bronce','#cd7f32'],['Plata','#c0c0c0'],['Oro','#f2c94c'],['Platino','#7fe0d8'],['Diamante','#6cc3ff'],['Campeón','#c77dff'],['Real','#ff5c5c']];
 const RAR={C:['Común','#9aa7a0',10,60],R:['Rara','#4aa3ff',25,25],E:['Épica','#b266ff',50,11],L:['Legendaria','#ffb020',100,4],V:['Evento','#ff7a1a',80,0],X:['Exclusiva','#ff5c5c',0,0]};
 const mk=(id,n,r,bg,em,fbg,bd,jk,ink,sym,o={})=>({id,n,r,bg,em,o,f:{bg:fbg,bd,jk,ink,sym}});
@@ -257,17 +257,17 @@ function marks(h){const k=h.map(c=>c.id).sort().join();if(MC.k==k)return MC.v;co
  for(let a=0;a<rest.length;a++)for(let b=a+1;b<rest.length;b++){const x=h[rest[a]],y=h[rest[b]];if(pu.has(x.id)||pu.has(y.id))continue;if((x.v==y.v&&x.s!=y.s)||(x.s==y.s&&x.v!=y.v&&Math.abs(x.v-y.v)<=2)){const col=PC2[pi++%4];v[x.id]={cl:'pr',col};v[y.id]={cl:'pr',col};pu.add(x.id);pu.add(y.id)}}
  MC={k,v};return v}
 /* tutorial */
-const TS=[['¡Bienvenido a Superremigio!','Gana quien primero ordene sus <b>10 cartas</b> en grupos de 3 o más. Hay 4 palos (🪙 🏆 ⚔️ 🌿), valores 1-7, S (Sota), C (Caballo) y R (Rey), y 4 comodines.',[[0,1],[1,7],[2,8],[3,10],[-1,0]]],
+const TS=[['¡Bienvenido a Superremigio!','Gana quien primero ordene sus <b>10 cartas</b> en grupos de 3 o más. Hay 4 palos (🪙 🏆 ⚔️ 🌿), valores 1 al 9, S (Sota), C (Caballo) y R (Rey), y 4 comodines.',[[0,1],[1,8],[2,9],[3,12],[-1,0]]],
 ['Tu turno','En cada turno <b>robas 1 carta</b> (del mazo boca abajo o la última del pozo) y después <b>descartas 1</b>. Tocas la carta para elegirla y pulsas «Descartar».',['B',[0,5]]],
 ['Tríos y cuartetos','Mismo número y <b>palos distintos</b>. Valen 3 o 4 cartas.',[[0,7],[1,7],[2,7]]],
-['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, S, C, R; el 1 es el más bajo.',[[1,3],[1,4],[1,5],[1,6]]],
-['El comodín','Un 🃏 sustituye a cualquier carta, pero <b>solo uno por grupo</b>.',[[0,4],[-1,0],[0,6]]],
+['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, 8, 9, S, C, R; el 1 es el más bajo.',[[1,3],[1,4],[1,5],[1,6]]],
+['El comodín','Un 🃏 sustituye a cualquier carta. Puedes poner <b>hasta dos por grupo</b>: con dos comodines basta <b>una sola carta real</b> para hacer un trío o una escalera.',[[0,4],[-1,0],[0,6],[2,9],[-1,0],[-1,0]]],
 ['Cómo se gana','Cuando tras descartar tus 10 cartas queden todas en grupos (por ejemplo 3+3+4), <b>cierras y ganas</b>. Ojo: <b>no se puede cerrar en la primera ronda</b>.',[[0,7],[1,7],[2,7],[3,2],[3,3],[3,4]]],
 ['Ayudas y tiempo','Subrayado <b>sólido de color</b> = grupo ya formado. Subrayado <b>punteado</b> = pareja que busca una carta. Si la carta del pozo te sirve, brilla en verde. Tienes <b>60 segundos por turno</b>. Reordena tus cartas arrastrando o con ◀ ▶, y usa 💬 para el chat. Puedes desactivar las ayudas y el sonido en Ajustes.',[[2,5],[2,6]]]];
 function tut(i=0){const T=TS[i];let o=$('#tut');if(!o){o=document.createElement('div');o.id='tut';o.className='ov';document.body.appendChild(o)}
  o.innerHTML=`<div class="box"><div class="sub">Tutorial ${i+1}/${TS.length}</div><h2>${T[0]}</h2><div class="row" style="margin:10px 0">${T[2].map(c=>c=='B'?back(S.deck):cardH({s:c[0],v:c[1]},'',S.deck)).join('')}</div><p style="text-align:left">${T[1]}</p><div class="row">${i?`<button onclick="tut(${i-1})">←</button>`:''}${i<TS.length-1?`<button class="pri" onclick="tut(${i+1})">Siguiente</button>`:'<button class="pri" onclick="tutEnd()">¡A jugar!</button>'}<button onclick="tutEnd()">Saltar</button></div></div>`}
 function tutEnd(){const o=$('#tut');o&&o.remove();S.tut=1;save()}
-function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 40 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
+function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 48 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
 <div class="tiles"><button class="tile big pri" onclick="search('quick')"><b>⚡ Partida Rápida</b><small>4 jugadores · sin rango</small></button><button class="tile big" onclick="search('rank')"><b>🏅 Clasificatoria</b><small>Temporada ${S.season} · quedan ${daysLeft()} días</small></button>
 <button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="tut(0)"><b>🎓 Tutorial</b></button></div>`}
 function rules(){app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Reglas</h2><p>Cada jugador recibe <b>10 cartas</b>. En tu turno <b>robas 1</b> (mazo o pozo) y <b>descartas 1</b>.</p><p><b>Cierras</b> cuando, al descartar, las 10 cartas restantes están en grupos de mínimo 3 (ej. 3-3-4):</p><ul><li><b>Trío/Cuarteto:</b> mismo número, palos distintos.</li><li><b>Escalera:</b> 3+ cartas consecutivas del mismo palo (1-7, Sota, Caballo, Rey). El 1 es el más bajo.</li><li><b>Comodín 🃏:</b> sustituye cualquier carta; máximo 1 por grupo.</li></ul><p>S = Sota, C = Caballo, R = Rey. Gana la primera persona que cierre. Victoria: +2 monedas.</p></div>`}
@@ -286,9 +286,9 @@ function pack(){if(S.coins<20)return toast('Monedas insuficientes');S.coins-=20;
  if(S.owned.includes(d.id)){S.coins+=5;toast('Duplicado '+d.n+': +5 🪙')}else{S.owned.push(d.id);toast('¡Nueva baraja: '+d.n+'!')}save();shop()}
 /* ---------- Lógica de reglas ---------- */
 const cnt=m=>{let c=0;while(m){c+=m&1;m>>=1}return c};
-function okGroup(g){const n=g.length;if(n<3)return false;const J=g.filter(c=>c.s<0).length;if(J>1)return false;const a=g.filter(c=>c.s>=0),m=a.length;
+function okGroup(g){const n=g.length;if(n<3)return false;const J=g.filter(c=>c.s<0).length;if(J>2)return false;const a=g.filter(c=>c.s>=0),m=a.length;
  if(n<=4&&new Set(a.map(c=>c.v)).size==1&&new Set(a.map(c=>c.s)).size==m)return true;
- if(new Set(a.map(c=>c.s)).size==1&&new Set(a.map(c=>c.v)).size==m){const vs=a.map(c=>c.v),mn=Math.min(...vs),mx=Math.max(...vs),need=mx-mn+1-m;if(need>J)return false;return J-need<=(mn-1)+(10-mx)}
+ if(new Set(a.map(c=>c.s)).size==1&&new Set(a.map(c=>c.v)).size==m){const vs=a.map(c=>c.v),mn=Math.min(...vs),mx=Math.max(...vs),need=mx-mn+1-m;if(need>J)return false;return J-need<=(mn-1)+(12-mx)}
  return false}
 function cover(h){const n=h.length,V=new Map(),memo={},by=Array.from({length:n},()=>[]);
  for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];for(let i=0;i<n;i++)if(m>>i&1)g.push(h[i]);if(okGroup(g))by[31-Math.clz32(m&-m)].push(m)}
@@ -304,7 +304,7 @@ function search(mode){if(typeof Peer!='undefined')return mmGo(mode);let t=8;app.
 function start(mode){const names=['Lucía','Marc','Núria','Pau','Jordi','Alba','Biel','Carla','Òscar','Mireia'];let u=names.sort(()=>Math.random()-.5);
  const pl=[{name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins,bot:0,hand:[]}];
  for(let i=1;i<4;i++)pl.push({name:u[i]+' (bot)',title:Math.random()<.6?['Veterano','Jugón','Aprendiz','Maestro de Mesa','Comodinero'][rnd(0,4)]:'',av:AV[rnd(0,7)],deck:DECKS[rnd(0,DECKS.length-1)].id,wins:rnd(0,300),bot:1,lvl:Math.random()<.65?1:2,hand:[]});
- let d=[];for(let s=0;s<4;s++)for(let v=1;v<=10;v++)d.push({s,v,id:d.length});for(let i=0;i<4;i++)d.push({s:-1,v:0,id:d.length});d.sort(()=>Math.random()-.5);
+ let d=[];for(let s=0;s<4;s++)for(let v=1;v<=12;v++)d.push({s,v,id:d.length});for(let i=0;i<4;i++)d.push({s:-1,v:0,id:d.length});d.sort(()=>Math.random()-.5);
  if(ON&&ON.role=='h')for(let i=1;i<4;i++)if(ON.conns[i]&&ON.info[i])pl[i]=Object.assign({},ON.info[i],{bot:0,remote:1,hand:[]});
  pl.forEach(p=>{p.hand=d.splice(0,10)});G={mode,pl,draw:d,disc:[d.pop()],turn:0,ph:'draw',sel:null,over:false,tc:[0,0,0,0]};if(!ON){CH=[];chatUI()}vs()}
 const sortH=h=>h.sort((a,b)=>(a.s<0)-(b.s<0)||a.s-b.s||a.v-b.v);
