@@ -209,7 +209,7 @@ function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pr
  function try1(){if(dead())return;if(slot>MMK){slot=1;return setTimeout(try1,2500)}
   const c=pe.connect('remigio-'+code(slot),{reliable:true});let d=0;
   const fin=r=>{if(d||dead())return;d=1;clearTimeout(to);cur=null;
-   if(r=='open'){c.on('data',m=>{if(dead())return;if(m&&m.t=='full'){try{c.close()}catch(e){}slot++;ON.conn=null;try1()}else cMsg(m)});
+   if(r=='open'){c.on('data',m=>{if(dead())return;if(m&&m.t=='full'){ON.conn=null;try{c.close()}catch(e){}slot++;try1()}else cMsg(m)});
     c.on('close',()=>{if(ON&&ON.peer===pe&&ON.conn===c&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}});
     ON.conn=c;ON.open=1;ON.code=code(slot);c.send({t:'join',p:me()})}
    else{try{c.close()}catch(e){}claim()}};
@@ -304,7 +304,7 @@ function cloudSoon(){if(!U||S.uid!=U.uid)return;clearTimeout(CT);CT=setTimeout(c
 function cloudSave(){if(!FB||!U||S.uid!=U.uid)return;S.ts=Date.now();const b=FB.d.batch();b.set(FB.d.collection('users').doc(U.uid),{s:JSON.stringify(S),ts:S.ts});
  if(S.rg>0)b.set(FB.d.collection('rank'+S.season).doc(U.uid),{n:U.displayName||S.name,pts:S.pts|0,w:S.wins|0,t:S.title?tn(S.title):'',ts:S.ts});b.commit().catch(e=>toast('☁️ No se pudo guardar ('+(e.code||'error')+')'))}
 function cloudLoad(){FB.d.collection('users').doc(U.uid).get().then(d=>{
- const use=o=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);S.uid=U.uid;S.name=U.displayName||S.name;rollSeason();ap();try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}toast('☁️ Progreso cargado');menu()};
+ const use=o=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);S.uid=U.uid;S.name=U.displayName||S.name;rollSeason();ap();try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}toast('☁️ Progreso cargado');if(!ON)menu()};
  if(!d.exists){S.uid=U.uid;S.name=U.displayName||S.name;save();cloudSave();if($('#acu'))acct();return}
  const c=JSON.parse(d.data().s),ts=d.data().ts||0;
  if(S.uid==U.uid){if(ts>(S.ts||0))use(c);else{cloudSave();if($('#acu'))acct()}}
