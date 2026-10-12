@@ -86,7 +86,7 @@ textarea{width:100%;font:12px monospace;padding:8px;border-radius:8px;border:1px
 .glow{outline:3px solid #4cd964;box-shadow:0 0 14px #4cd964!important}
 .leg2{font-size:11px;color:#d7e5dc;text-align:center;margin-top:8px}
 body{background:var(--pg,radial-gradient(ellipse at top,#1f3f31,#07130e 70%)) fixed}.table{background:var(--tb,radial-gradient(ellipse at center,#2e8a60,#0f3a28 85%));border-color:var(--tbd,#6b4423)}
-</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script></head><body><div id="app"></div>
+</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script></head><body><div id="app"></div>
 <script>
 const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','8','9','S','C','R'];
 const RANKS=[['Bronce','#cd7f32'],['Plata','#c0c0c0'],['Oro','#f2c94c'],['Platino','#7fe0d8'],['Diamante','#6cc3ff'],['Campeón','#c77dff'],['Real','#ff5c5c']];
@@ -159,10 +159,10 @@ const seg=(k,o)=>`<div class="seg">${o.map(([l,v])=>`<button class="${S.set[k]==
 const enc=()=>btoa(unescape(encodeURIComponent(JSON.stringify(S))));
 function cp(){const e=$('#sv');e.select();const ok=()=>toast('Código copiado');try{navigator.clipboard.writeText(e.value).then(ok,()=>{document.execCommand('copy');ok()})}catch(x){document.execCommand('copy');ok()}}
 function imp(){try{const o=JSON.parse(decodeURIComponent(escape(atob($('#im').value.trim()))));if(typeof o!='object'||!Array.isArray(o.owned)||o.coins===undefined)throw 0;ask('Esto reemplazará tu progreso actual. ¿Continuar?',()=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);rollSeason();save();ap();toast('Partida importada');settings()})}catch(e){toast('Código no válido')}}
-function testNet(){if(typeof Peer=='undefined')return ask('El componente online (PeerJS) no se cargó. Revisa tu internet o desactiva el bloqueador de anuncios.',()=>{});toast('Probando conexión…');const t=Date.now();let p;try{p=new Peer()}catch(e){return ask('Error al iniciar la conexión.',()=>{})}
+function testNet(){if(FBR()&&!U)return ask('Inicia sesión en ☁️ Cuenta para probar la conexión online.',()=>{});if(!FBR()&&typeof Peer=='undefined')return ask('El componente online (PeerJS) no se cargó. Revisa tu internet o desactiva el bloqueador de anuncios.',()=>{});toast('Probando conexión…');const t=Date.now();let p;try{p=mkPeer()}catch(e){return ask('Error al iniciar la conexión.',()=>{})}
  const to=setTimeout(()=>{try{p.destroy()}catch(e){}ask('❌ El servidor online no respondió en 15 s. Puede estar caído o bloqueado en tu red. Prueba con datos móviles u otro wifi.',()=>{})},15000);
  p.on('open',()=>{clearTimeout(to);p.destroy();ask('✅ Conexión online correcta ('+(Date.now()-t)+' ms). Ya puedes jugar online.',()=>{})});
- p.on('error',e=>{clearTimeout(to);try{p.destroy()}catch(x){}ask('❌ Error: '+e.type+'. El servidor online no responde o está bloqueado en esta red.',()=>{})})}
+ p.on('error',e=>{clearTimeout(to);try{p.destroy()}catch(x){}ask('❌ Error: '+e.type+(e.message?' ('+String(e.message).slice(0,120)+')':'')+'. '+(FBR()?'Revisa que la base de datos Realtime esté creada, con sus reglas, y que hayas iniciado sesión.':'El servidor online no responde o está bloqueado en esta red.'),()=>{})})}
 function settings(){app.innerHTML=bar(1)+`<h2>Ajustes</h2><div class="item L"><div class="set"><span>Velocidad de los bots</span>${seg('speed',[['Lenta',1.6],['Normal',1],['Rápida',.5]])}</div>
 <div class="set"><span>Intro "VS" al empezar</span>${seg('vs',[['Sí',1],['No',0]])}</div><div class="set"><span>Ordenar mano al robar</span>${seg('auto',[['Sí',1],['No',0]])}</div>
 <div class="set"><span>Tamaño de cartas</span>${seg('size',[['Pequeño',.85],['Normal',1],['Grande',1.2]])}</div><div class="set"><span>Conexión online</span><button onclick="testNet()">Probar conexión</button></div><div class="set"><span>Sonido</span>${seg('snd',[['Sí',1],['No',0]])}</div><div class="set"><span>Ayudas visuales (grupos y parejas)</span>${seg('hint',[['Sí',1],['No',0]])}</div><div class="set"><span>Confirmar al abandonar</span>${seg('conf',[['Sí',1],['No',0]])}</div></div>
@@ -187,11 +187,11 @@ const sayI=()=>{const e=$('#ci');if(say(e.value))e.value=''};
 function botSay(p,m){m=m||BP[rnd(0,7)];chatAdd(p.name,m);bc({t:'chat',n:p.name,m})}
 /* ---- Online (PeerJS, anfitrión autoritativo) ---- */
 function leaveOn(){if(ON){clearTimeout(ON.mt);try{ON.peer.destroy()}catch(e){}ON=null}}
-function okP(){if(typeof Peer=='undefined'){toast('No se pudo cargar el componente online. Revisa tu internet o el bloqueador de anuncios');return false}return true}
-function fail(){const e=LE||'sin respuesta';leaveOn();onl();ask('No se pudo conectar con el servidor online ('+e+'). Puede ser tu red o que el servidor esté caído. Si estás en España y hay partido de LaLiga, algunas operadoras bloquean estos servidores. Prueba con otra red (datos móviles o wifi distinto) o en otro momento.',()=>{})}
+function okP(){if(FBR()){if(!U){ask('Para jugar online necesitas iniciar sesión en ☁️ Cuenta (usuario y contraseña).',()=>{});return false}return true}if(typeof Peer=='undefined'){toast('No se pudo cargar el componente online. Revisa tu internet o el bloqueador de anuncios');return false}return true}
+function fail(){const e=LE||'sin respuesta';leaveOn();onl();ask(FBR()?'No se pudo conectar con el servidor online ('+e+'). Comprueba tu conexión y que la base de datos Realtime de Firebase esté creada con sus reglas.':'No se pudo conectar con el servidor online ('+e+'). Puede ser tu red o que el servidor esté caído. Prueba con otra red o en otro momento.',()=>{})}
 function onl(){leaveOn();app.innerHTML=bar(1)+`<h2>🌐 Jugar online</h2><div class="item L"><p>Juega con amigos con un código de sala (conexión directa entre navegadores). Los asientos libres los ocupan bots. Si el anfitrión sale, la sala se cierra.</p><div class="row" style="justify-content:flex-start"><button class="pri" onclick="host()">Crear sala</button></div><p>O únete con un código:</p><div class="row" style="justify-content:flex-start"><input id="rc" maxlength="5" placeholder="CÓDIGO" style="text-transform:uppercase;width:130px"><button onclick="joinR()">Unirse</button></div></div>`}
 function host(cid,mm){if(!okP())return;const code=cid||Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(0,31)]).join('');
- const pe=new Peer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0,mm:mm||0,mode:mm||''};CH=[];G=null;chatUI();
+ const pe=mkPeer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0,mm:mm||0,mode:mm||''};CH=[];G=null;chatUI();
  const t=setTimeout(()=>{if(ON&&ON.peer===pe&&!ON.open){if(mm)mmFail(mm);else fail()}},15000);
  pe.on('open',()=>{clearTimeout(t);ON.open=1;lobbyBcast();if(mm)ON.mt=setTimeout(()=>{if(ON&&!ON.started)startOnline()},12000)});
  pe.on('error',e=>{LE=e.type;if(ON&&ON.peer===pe&&!ON.open){clearTimeout(t);if(mm){leaveOn();return e.type=='unavailable-id'?mmGo(mm):mmFail(mm)}fail()}});
@@ -199,7 +199,7 @@ function host(cid,mm){if(!okP())return;const code=cid||Array.from({length:5},()=
   ON.conns[k]=c;c.on('data',m=>hMsg(k,m));c.on('close',()=>hLeft(k))})}
 const MMK=8;
 function mmFail(mode){leaveOn();toast('Sin conexión online: jugarás contra bots');start(mode)}
-function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pre+String(n).padStart(3,'0');let pe;try{pe=new Peer()}catch(e){return mmFail(mode)}
+function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pre+String(n).padStart(3,'0');let pe;try{pe=mkPeer()}catch(e){return mmFail(mode)}
  ON={role:'c',peer:pe,mm:mode};CH=[];G=null;chatUI();
  app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:380px;margin:auto"><div style="font-size:2.5rem">🔎</div><p>Buscando jugadores reales… si no hay, te acompañarán bots.</p><button onclick="menu()">Cancelar</button></div>`;
  let cur=null;const dead=()=>!ON||ON.peer!==pe;
@@ -228,9 +228,9 @@ function hLeft(k){if(!ON)return;ON.conns[k]=null;if(!G||G.over||!ON.started){ON.
  const p=G.pl[k];p.remote=0;p.bot=1;p.lvl=2;p.name+=' (bot)';chatAdd(p.name,'se ha desconectado');table();if(G.turn==k){if(G.ph=='disc')setTimeout(()=>discard(k,bestDisc(p.hand,2).i),900);else next()}}
 function startOnline(){clearTimeout(ON.mt);ON.started=1;ON.sendIntro=1;start(ON.mode||'online')}
 function view(k){const R=a=>a.map((_,j)=>a[(k+j)%4]);return {mode:G.mode,turn:(G.turn-k+4)%4,ph:G.ph,over:G.over,dc:G.draw.length,top:G.disc[G.disc.length-1]||null,tc:R(G.tc),rem:Math.max(0,(G.dl||0)-Date.now()),pl:R(G.pl).map((p,j)=>({name:p.name,title:p.title,av:p.av,deck:p.deck,wins:p.wins,hand:j==0?p.hand:p.hand.map(()=>({s:9,v:0}))}))}}
-function bcast(){if(!ON||!ON.conns||!G)return;ON.conns.forEach((c,k)=>{if(c&&c.open){const m={t:'state',v:view(k)};if(ON.sendIntro)m.intro=1;c.send(m)}});ON.sendIntro=0}
+function bcast(){if(!ON||!ON.conns||!G)return;ON.lk=ON.lk||[];ON.conns.forEach((c,k)=>{if(c&&c.open){const v=view(k),key=JSON.stringify(Object.assign({},v,{rem:0}));if(ON.lk[k]===key&&!ON.sendIntro)return;ON.lk[k]=key;const m={t:'state',v};if(ON.sendIntro)m.intro=1;c.send(m)}});ON.sendIntro=0}
 function joinR(){if(!okP())return;const code=($('#rc').value||'').trim().toUpperCase();if(code.length!=5)return toast('El código tiene 5 caracteres');
- const pe=new Peer();ON={role:'c',peer:pe,code};CH=[];G=null;chatUI();app.innerHTML=bar(1)+'<div class="sub">Conectando…</div>';
+ const pe=mkPeer();ON={role:'c',peer:pe,code};CH=[];G=null;chatUI();app.innerHTML=bar(1)+'<div class="sub">Conectando…</div>';
  const t=setTimeout(()=>{if(ON&&!ON.open)fail()},15000);
  pe.on('open',()=>{const c=pe.connect('remigio-'+code,{reliable:true});ON.conn=c;c.on('open',()=>{clearTimeout(t);ON.open=1;c.send({t:'join',p:me()})});c.on('data',cMsg);c.on('close',()=>{if(ON&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}})});
  pe.on('error',e=>{LE=e.type;if(ON&&!ON.open){clearTimeout(t);fail()}})}
@@ -291,9 +291,9 @@ function tut(i=0){const T=TS[i];let o=$('#tut');if(!o){o=document.createElement(
  o.innerHTML=`<div class="box"><div class="sub">Tutorial ${i+1}/${TS.length}</div><h2>${T[0]}</h2><div class="row" style="margin:10px 0">${T[2].map(c=>c=='B'?back(S.deck):cardH({s:c[0],v:c[1]},'',S.deck)).join('')}</div><p style="text-align:left">${T[1]}</p><div class="row">${i?`<button onclick="tut(${i-1})">←</button>`:''}${i<TS.length-1?`<button class="pri" onclick="tut(${i+1})">Siguiente</button>`:'<button class="pri" onclick="tutEnd()">¡A jugar!</button>'}<button onclick="tutEnd()">Saltar</button></div></div>`}
 function tutEnd(){const o=$('#tut');o&&o.remove();S.tut=1;save()}
 /* ---- Firebase: cuentas, guardado en la nube y ranking ---- */
-const FB_CONFIG={apiKey:"AIzaSyAEPzpAjQsQ18QEvFgAaep38w-Y0u6rLMA",authDomain:"superremigio-adfaa.firebaseapp.com",projectId:"superremigio-adfaa",storageBucket:"superremigio-adfaa.firebasestorage.app",messagingSenderId:"973039326576",appId:"1:973039326576:web:4141bbc9bbb4c88788ebb5"}; /* pega aquí la configuración de tu proyecto Firebase: {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."} */
+const FB_CONFIG={apiKey:"AIzaSyAEPzpAjQsQ18QEvFgAaep38w-Y0u6rLMA",authDomain:"superremigio-adfaa.firebaseapp.com",projectId:"superremigio-adfaa",databaseURL:"https://superremigio-adfaa-default-rtdb.europe-west1.firebasedatabase.app",storageBucket:"superremigio-adfaa.firebasestorage.app",messagingSenderId:"973039326576",appId:"1:973039326576:web:4141bbc9bbb4c88788ebb5"}; /* pega aquí la configuración de tu proyecto Firebase: {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."} */
 let FB=null,U=null,CT=null;
-function fbInit(){if(FB)return true;if(!FB_CONFIG||typeof firebase=='undefined')return false;try{firebase.initializeApp(FB_CONFIG);FB={a:firebase.auth(),d:firebase.firestore()};FB.a.onAuthStateChanged(u=>{U=u;if(u)cloudLoad();else if($('#acu'))acct()});return true}catch(e){return false}}
+function fbInit(){if(FB)return true;if(!FB_CONFIG||typeof firebase=='undefined')return false;try{firebase.initializeApp(FB_CONFIG);FB={a:firebase.auth(),d:firebase.firestore(),r:firebase.database?firebase.database():null};FB.a.onAuthStateChanged(u=>{U=u;if(u)cloudLoad();else if($('#acu'))acct()});return true}catch(e){return false}}
 const fe=e=>toast({'auth/email-already-in-use':'Ese usuario ya existe','auth/wrong-password':'Contraseña incorrecta','auth/invalid-credential':'Usuario o contraseña incorrectos','auth/user-not-found':'No existe ese usuario','auth/network-request-failed':'Sin conexión con el servidor','auth/too-many-requests':'Demasiados intentos, espera un poco'}[e.code]||'Error: '+(e.code||e.message));
 const em=n=>n+'@superremigio.game',creds=()=>{const n=($('#un').value||'').trim().toLowerCase(),p=$('#pw').value||'';if(!/^[a-z0-9_]{3,14}$/.test(n)){toast('Usuario: 3-14 letras minúsculas, números o _');return null}if(p.length<6){toast('La contraseña necesita 6 caracteres como mínimo');return null}return [n,p]};
 function reg(){const c=creds();if(!c)return;FB.a.createUserWithEmailAndPassword(em(c[0]),c[1]).then(r=>r.user.updateProfile({displayName:c[0]}).then(()=>{U=FB.a.currentUser;S.uid=U.uid;S.name=c[0];save();cloudSave();toast('Cuenta creada ☁️');acct()})).catch(fe)}
@@ -320,6 +320,32 @@ function ranking(){app.innerHTML=bar(1)+`<h2>🏆 Ranking · Temporada ${S.seaso
  FB.d.collection('rank'+S.season).orderBy('pts','desc').limit(50).get().then(q=>{const r=[];q.forEach(d=>r.push(Object.assign({id:d.id},d.data())));const e=$('#rk');if(!e)return;
   e.outerHTML=r.length?`<div class="item L">${r.map((x,i)=>{const k=RANKS[Math.min(6,Math.floor((x.pts||0)/100))];return `<div class="set" style="${U&&x.id==U.uid?'background:#f2c94c22':''}"><span>${i+1}. <b>${sn(x.n)}</b> ${x.t?`<span class="tt">«${sn(x.t,30)}»</span>`:''}</span><span style="color:${k[1]}">${k[0]} · ${x.pts|0} pts</span></div>`}).join('')}</div>${U?'':'<p class="sub">Inicia sesión en ☁️ Cuenta para aparecer aquí.</p>'}`:'<div class="sub">Aún no hay nadie esta temporada. Juega una Clasificatoria con tu cuenta iniciada.</div>'
  }).catch(x=>{const e=$('#rk');if(e)e.textContent='No se pudo cargar el ranking ('+(x.code||'error')+')'})}
+/* ---- Transporte online sobre Firebase Realtime Database (sustituye a PeerJS cuando hay sesión) ---- */
+const FBR=()=>!!(FB_CONFIG&&FB_CONFIG.databaseURL&&typeof firebase!='undefined'&&firebase.database&&fbInit()&&FB&&FB.r);
+class FbConn{constructor(p,id){this.p=p;this.peer=id;this.h={};this.open=false;this.closed=false}
+ on(e,f){(this.h[e]=this.h[e]||[]).push(f);return this}
+ emit(e,...a){(this.h[e]||[]).slice().forEach(f=>{try{f(...a)}catch(x){console.error(x)}})}
+ _raw(k,d){if(this.p.dead)return;FB.r.ref('inbox/'+this.peer).push({f:this.p.id,k,d:d===undefined?null:d})}
+ send(m){if(this.open)this._raw('d',JSON.stringify(m))}
+ close(){if(this.closed)return;this._raw('b');this._close()}
+ _watch(id){const r=FB.r.ref('peers/'+id),f=r.on('value',s=>{if(!s.exists())this._close()});this._unw=()=>r.off('value',f)}
+ _close(){if(this.closed)return;this.closed=true;const w=this.open;this.open=false;if(this._unw)this._unw();delete this.p.conns[this.peer];if(w)this.emit('close')}}
+class FbPeer{constructor(id){this.h={};this.id=id||('c'+Math.random().toString(36).slice(2,10));this.open=false;this.dead=false;this.conns={};this.pr=FB.r.ref('peers/'+this.id);setTimeout(()=>this._claim(!!id),0)}
+ on(e,f){(this.h[e]=this.h[e]||[]).push(f);return this}
+ emit(e,...a){(this.h[e]||[]).slice().forEach(f=>{try{f(...a)}catch(x){console.error(x)}})}
+ _claim(fixed){this.pr.transaction(c=>c?undefined:{t:Date.now()}).then(r=>{if(this.dead)return;if(!r.committed)return this.emit('error',{type:fixed?'unavailable-id':'server-error'});
+  this.pr.onDisconnect().remove();const ib=FB.r.ref('inbox/'+this.id);this.ib=ib;ib.onDisconnect().remove();
+  return ib.remove().then(()=>{if(this.dead)return;ib.on('child_added',s=>{const m=s.val();s.ref.remove();this._recv(m)});this.open=true;this.emit('open',this.id)})}).catch(e=>this.emit('error',{type:(e&&e.code)||'network',message:e&&e.message}))}
+ connect(id){const C=new FbConn(this,id);this.conns[id]=C;FB.r.ref('peers/'+id).once('value').then(s=>{if(this.dead||C.closed)return;if(!s.exists()){delete this.conns[id];this.emit('error',{type:'peer-unavailable',message:id});return}C._watch(id);C._raw('h')}).catch(e=>this.emit('error',{type:(e&&e.code)||'network',message:e&&e.message}));return C}
+ _recv(m){if(!m||this.dead)return;const f=m.f;
+  if(m.k=='h'){if(this.conns[f])return;const C=new FbConn(this,f);this.conns[f]=C;C._watch(f);this.emit('connection',C);C.open=true;C._raw('a');setTimeout(()=>C.emit('open'),0)}
+  else{const C=this.conns[f];if(!C)return;
+   if(m.k=='a'){if(!C.open){C.open=true;C.emit('open')}}
+   else if(m.k=='d'&&C.open){let d=null;try{d=JSON.parse(m.d)}catch(e){}if(d!==null)C.emit('data',d)}
+   else if(m.k=='b')C._close()}}
+ destroy(){Object.keys(this.conns).forEach(k=>{const C=this.conns[k];try{C._raw('b')}catch(e){}C._close()});this.dead=true;try{if(this.ib){this.ib.off();this.ib.remove()}this.pr.remove()}catch(e){}}}
+const mkPeer=id=>FBR()?new FbPeer(id):(id?new Peer(id):new Peer());
+window.addEventListener('beforeunload',()=>{try{if(ON)leaveOn()}catch(e){}});
 function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 48 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
 <div class="tiles"><button class="tile big pri" onclick="search('quick')"><b>⚡ Partida Rápida</b><small>4 jugadores · sin rango</small></button><button class="tile big" onclick="search('rank')"><b>🏅 Clasificatoria</b><small>Temporada ${S.season} · quedan ${daysLeft()} días</small></button>
 <button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="ranking()"><b>🏆 Ranking</b></button><button class="tile" onclick="acct()"><b>☁️ Cuenta</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="tut(0)"><b>🎓 Tutorial</b></button></div>`}
@@ -362,7 +388,7 @@ const ev=(h,l)=>cover(h)*10+(l==2?pot(h):0);
 function bestDisc(h,l){let best=-1,bi=[];h.forEach((c,i)=>{const r=h.filter((_,k)=>k!=i),e=ev(r,l);if(e>best){best=e;bi=[i]}else if(e==best)bi.push(i)});return {i:bi[rnd(0,bi.length-1)],e:best}}
 /* ---------- Partida ---------- */
 let G=null;
-function search(mode){if(typeof Peer!='undefined')return mmGo(mode);let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:360px;margin:auto"><div style="font-size:3rem" id="tm">8</div><div>Jugadores humanos: 1/4</div><br><button onclick="clearInterval(window.ti);menu()">Cancelar</button></div>`;
+function search(mode){if(FBR()){if(U)return mmGo(mode);toast('Inicia sesión en ☁️ Cuenta para jugar online. Jugarás contra bots')}else if(typeof Peer!='undefined')return mmGo(mode);let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:360px;margin:auto"><div style="font-size:3rem" id="tm">8</div><div>Jugadores humanos: 1/4</div><br><button onclick="clearInterval(window.ti);menu()">Cancelar</button></div>`;
  window.ti=setInterval(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0){clearInterval(window.ti);start(mode)}},1000)}
 function start(mode){const names=['Lucía','Marc','Núria','Pau','Jordi','Alba','Biel','Carla','Òscar','Mireia'];let u=names.sort(()=>Math.random()-.5);
  const pl=[{name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins,bot:0,hand:[]}];
