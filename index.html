@@ -85,7 +85,8 @@ textarea{width:100%;font:12px monospace;padding:8px;border-radius:8px;border:1px
 .card.gr{box-shadow:0 3px 8px #0008,inset 0 0 0 3px var(--gc)!important}
 .glow{outline:3px solid #4cd964;box-shadow:0 0 14px #4cd964!important}
 .leg2{font-size:11px;color:#d7e5dc;text-align:center;margin-top:8px}
-</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="app"></div>
+body{background:var(--pg,radial-gradient(ellipse at top,#1f3f31,#07130e 70%)) fixed}.table{background:var(--tb,radial-gradient(ellipse at center,#2e8a60,#0f3a28 85%));border-color:var(--tbd,#6b4423)}
+</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script></head><body><div id="app"></div>
 <script>
 const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','8','9','S','C','R'];
 const RANKS=[['Bronce','#cd7f32'],['Plata','#c0c0c0'],['Oro','#f2c94c'],['Platino','#7fe0d8'],['Diamante','#6cc3ff'],['Campeón','#c77dff'],['Real','#ff5c5c']];
@@ -108,14 +109,32 @@ mk('oro','Oro Animado','L','linear-gradient(120deg,#f2c94c,#fff3b0,#c9961a,#f2c9
 mk('cos','Cósmica','L','radial-gradient(circle at 30% 30%,#6b2fff,#0a0420)','✦','radial-gradient(circle at 50% 0,#3b1a8a,#07021a)','#b9a0ff','#ffffff',['#ffe17a','#ff8fd0','#8fe0ff','#9dffc0'],['☀️','🪐','🌙','☄️'],{leg:1}),
 mk('hal','Halloween 2026','V','radial-gradient(circle at 50% 40%,#ff8a1a,#2a0a00 70%)','🎃','linear-gradient(160deg,#2b1240,#0d0618)','#ff7a1a','#7dff6a',['#ff9a2a','#ff4a4a','#b57aff','#7dff6a'],['🎃','🕷️','🦇','💀']),
 mk('cam','Campeón','X','linear-gradient(135deg,#c77dff,#4a1a8a)','🏆','linear-gradient(135deg,#f6e8ff,#d9b3ff,#f6e8ff)','#c77dff','#4a1a8a',['#7a5a00','#a8205a','#2a2a8a','#1b5e20'],['🥇','👑','🗡️','🌟'],{leg:1}),
-mk('real','Corona Real','X','linear-gradient(135deg,#ff5c5c,#6b0f1a)','👑','linear-gradient(135deg,#fff6d6,#ffd9a0,#fff6d6)','#ff5c5c','#6b0f1a',['#7a5a00','#b3122a','#1a3c7a','#14532d'],['👑','💎','⚜️','🏵️'],{leg:1})];
+mk('real','Corona Real','X','linear-gradient(135deg,#ff5c5c,#6b0f1a)','👑','linear-gradient(135deg,#fff6d6,#ffd9a0,#fff6d6)','#ff5c5c','#6b0f1a',['#7a5a00','#b3122a','#1a3c7a','#14532d'],['👑','💎','⚜️','🏵️'],{leg:1}),
+mk('cafe','Café Parisino','C','repeating-linear-gradient(45deg,#6b4423 0 6px,#4e3019 6px 12px)','☕','linear-gradient(#fff4e0,#e6cfa6)','#6b4423','#4e3019',['#8a5a00','#a3342a','#3a4a7a','#4a6a2a'],['🍩','🍰','☕','🥐']),
+mk('jade','Jade Imperial','R','linear-gradient(135deg,#1f9a76,#0a3d30)','🐉','linear-gradient(160deg,#e9fbf3,#b6ead4)','#1f9a76','#0a3d30',['#8a6d00','#b3261e','#0a4b73','#0d6b4a'],['🏮','🎎','🐉','🍵']),
+mk('pira','Piratas','R','linear-gradient(135deg,#2b2b2b,#0a0a0a)','☠️','linear-gradient(160deg,#f1e2bd,#cfb27a)','#5a3a1a','#2b2b2b',['#8a6d00','#a52a2a','#1a3c6a','#2a5a2a'],['💰','🦜','⚓','🗡️']),
+mk('arcade','Arcade Retro','E','linear-gradient(135deg,#00e5ff,#7a2bff 60%,#ff2bd6)','👾','#0a0a1f','#00e5ff','#ffe600',['#ffe600','#ff4fa0','#00e5ff','#7dff6a'],['⭐','❤️','🕹️','👾']),
+mk('egipto','Antiguo Egipto','E','linear-gradient(135deg,#e2b14a,#7a4a10)','🏺','linear-gradient(160deg,#fff1c9,#e6c36b)','#b8860b','#3a2a0a',['#7a5a00','#a52a2a','#1a3c7a','#14532d'],['☀️','🐍','🏺','👁️']),
+mk('drag','Dragón Ancestral','L','linear-gradient(135deg,#ff3b1a,#3a0a00 60%,#ffb020)','🐲','linear-gradient(120deg,#2a0a05,#6a1a0a,#2a0a05)','#ffb020','#ffd36b',['#ffd36b','#ff7a5a','#ffb04a','#ffe08a'],['🔥','🐲','⚔️','🏰'],{leg:1})];
+const BGS=[
+{id:'verde',n:'Tapete clásico',r:'C',t:'radial-gradient(ellipse at center,#2e8a60,#0f3a28 85%)',p:'radial-gradient(ellipse at top,#1f3f31,#07130e 70%)',bd:'#6b4423'},
+{id:'azulb',n:'Tapete azul',r:'C',t:'radial-gradient(ellipse at center,#2f6fb5,#0f2f5a 85%)',p:'radial-gradient(ellipse at top,#1b3555,#07101f 70%)',bd:'#3b2a1a'},
+{id:'rojob',n:'Tapete burdeos',r:'C',t:'radial-gradient(ellipse at center,#a03045,#4a0f1c 85%)',p:'radial-gradient(ellipse at top,#4a1a24,#14070b 70%)',bd:'#2b1a10'},
+{id:'madera',n:'Mesa de madera',r:'R',t:'repeating-linear-gradient(90deg,#8a5a2b 0 24px,#7a4d22 24px 26px,#92612f 26px 50px)',p:'linear-gradient(#2a1a0e,#120a05)',bd:'#3d2410'},
+{id:'noche',n:'Noche estrellada',r:'R',t:'radial-gradient(circle at 20% 20%,#2a2a6a,#0a0a2a 70%)',p:'radial-gradient(ellipse at top,#14143a,#04040f 70%)',bd:'#c9a83a'},
+{id:'neonb',n:'Neón urbano',r:'E',t:'linear-gradient(135deg,#2b0a4a,#0a2a4a)',p:'linear-gradient(135deg,#12051f,#051a2a)',bd:'#ff2bd6'},
+{id:'atard',n:'Atardecer',r:'E',t:'linear-gradient(#ff8a4a,#c2457a 55%,#3a2a7a)',p:'linear-gradient(#3a2a5a,#120a24)',bd:'#ffd36b'},
+{id:'galax',n:'Galaxia',r:'L',t:'radial-gradient(circle at 30% 30%,#6b2fff,#1a0b4a 45%,#030314)',p:'radial-gradient(ellipse at top,#1a0b4a,#02020a 75%)',bd:'#b9a0ff'},
+{id:'halb',n:'Noche de Halloween',r:'V',t:'radial-gradient(circle at 75% 22%,#ffb347 0 6%,transparent 7%),radial-gradient(ellipse at center,#4a1a6a,#12041f 85%)',p:'radial-gradient(ellipse at top,#2a0a3a,#08020f 70%)',bd:'#ff7a1a'},
+{id:'rey',n:'Trono Real',r:'X',t:'linear-gradient(135deg,#6b0f1a,#2a0508)',p:'linear-gradient(#2a0508,#0a0102)',bd:'#f2c94c'}];
+const bgd=id=>BGS.find(b=>b.id==id)||BGS[0];
 const MIS=[{k:'play',g:3,c:2,t:'Diaria: juega 3 partidas'},{k:'win',g:1,c:3,t:'Diaria: gana 1 partida'},{k:'win',g:10,c:15,t:'Semanal: gana 10 partidas'},{k:'joker',g:1,c:5,t:'Logro: cierra usando un comodín'},{k:'win',g:50,c:25,t:'Logro: 50 victorias'}];
 const AV=['🦊','🐻','🦁','🐼','🐸','🦉','🐙','🐲'];
-const DEF=()=>({name:'Jugador',av:0,coins:20,wins:0,games:0,pts:0,owned:['std','azul'],deck:'std',m:{play:0,win:0,joker:0},done:[],season:null,best:-1,hist:{},titles:[],title:'',streak:0,bs:0,set:{speed:1,vs:1,auto:0,size:1,conf:1,snd:1,hint:1},mq:{},tut:0});
+const DEF=()=>({name:'Jugador',av:0,coins:20,wins:0,games:0,pts:0,owned:['std','azul'],deck:'std',m:{play:0,win:0,joker:0},done:[],season:null,best:-1,hist:{},titles:[],title:'',streak:0,bs:0,set:{speed:1,vs:1,auto:0,size:1,conf:1,snd:1,hint:1},mq:{},tut:0,bgs:['verde'],bg:'verde'});
 let S=DEF();
 try{const x=JSON.parse(localStorage.getItem('remigio'));if(x)S=Object.assign(S,x)}catch(e){}
 S.set=Object.assign(DEF().set,S.set);
-const save=()=>{try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}};
+const save=()=>{try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}cloudSoon()};
 const $=s=>document.querySelector(s),app=$('#app'),rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const dk=id=>DECKS.find(d=>d.id===id);
 const rank=()=>RANKS[Math.min(6,Math.floor(S.pts/100))];
@@ -132,21 +151,25 @@ const TT=[{id:'w1',n:'Principiante',d:'Gana 1 partida',ok:()=>S.wins>=1},{id:'w1
 function tn(id){const t=TT.find(x=>x.id==id);if(t)return t.n;const q=id.match(/^ms(\d+)$/);if(q)return 'Misionero · T'+q[1];const m=id.match(/^r(\d+)_(\d)$/);return m?RANKS[+m[2]][0]+' · T'+m[1]:id}
 function addT(id){if(!S.titles.includes(id)){S.titles.push(id);toast('Nuevo título: '+tn(id))}}
 const chk=()=>TT.forEach(t=>{if(t.ok())addT(t.id)});
-function awardRanks(){const i=Math.min(6,Math.floor(S.pts/100));for(let k=S.best+1;k<=i;k++){addT('r'+S.season+'_'+k);if(k==5&&!S.owned.includes('cam')){S.owned.push('cam');toast('¡Baraja Campeón desbloqueada!')}if(k==6&&!S.owned.includes('real')){S.owned.push('real');toast('¡Baraja Corona Real desbloqueada!')}}S.best=Math.max(S.best,i)}
+function awardRanks(){const i=Math.min(6,Math.floor(S.pts/100));for(let k=S.best+1;k<=i;k++){addT('r'+S.season+'_'+k);if(k==5&&!S.owned.includes('cam')){S.owned.push('cam');toast('¡Baraja Campeón desbloqueada!')}if(k==6&&!S.owned.includes('real')){S.owned.push('real');toast('¡Baraja Corona Real desbloqueada!')}if(k==6&&!S.bgs.includes('rey')){S.bgs.push('rey');toast('¡Fondo Trono Real desbloqueado!')}}S.best=Math.max(S.best,i)}
 function titles(){app.innerHTML=bar(1)+`<h2>Títulos</h2><div class="sub">Se muestran junto a tu nombre en las partidas</div><div class="row"><button onclick="S.title='';save();titles()">Sin título</button></div><div class="grid">${S.titles.map(id=>`<div class="item"><b>${tn(id)}</b><br><button ${S.title==id?'disabled':''} onclick="S.title='${id}';save();titles()" style="margin-top:6px">${S.title==id?'Equipado':'Equipar'}</button></div>`).join('')}${TT.filter(t=>!S.titles.includes(t.id)).map(t=>`<div class="item" style="opacity:.55"><b>🔒 ${t.n}</b><br><small>${t.d}</small></div>`).join('')}</div><p class="sub">Cada vez que subes de rango en la Clasificatoria ganas el título de ese rango y esa temporada.</p>`}
 const ask=(m,f)=>{window._ask=f;const o=document.createElement('div');o.className='ov';o.innerHTML=`<div class="box"><p>${m}</p><div class="row"><button class="pri" onclick="const f=_ask;this.closest('.ov').remove();f()">Aceptar</button><button onclick="this.closest('.ov').remove()">Cancelar</button></div></div>`;document.body.appendChild(o)};
-const ap=()=>document.documentElement.style.setProperty('--cs',S.set.size);
+const ap=()=>{const r=document.documentElement.style,b=bgd(S.bg);r.setProperty('--cs',S.set.size);r.setProperty('--tb',b.t);r.setProperty('--pg',b.p);r.setProperty('--tbd',b.bd)};
 const seg=(k,o)=>`<div class="seg">${o.map(([l,v])=>`<button class="${S.set[k]==v?'on':''}" onclick="S.set.${k}=${v};save();ap();settings()">${l}</button>`).join('')}</div>`;
 const enc=()=>btoa(unescape(encodeURIComponent(JSON.stringify(S))));
 function cp(){const e=$('#sv');e.select();const ok=()=>toast('Código copiado');try{navigator.clipboard.writeText(e.value).then(ok,()=>{document.execCommand('copy');ok()})}catch(x){document.execCommand('copy');ok()}}
 function imp(){try{const o=JSON.parse(decodeURIComponent(escape(atob($('#im').value.trim()))));if(typeof o!='object'||!Array.isArray(o.owned)||o.coins===undefined)throw 0;ask('Esto reemplazará tu progreso actual. ¿Continuar?',()=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);rollSeason();save();ap();toast('Partida importada');settings()})}catch(e){toast('Código no válido')}}
+function testNet(){if(typeof Peer=='undefined')return ask('El componente online (PeerJS) no se cargó. Revisa tu internet o desactiva el bloqueador de anuncios.',()=>{});toast('Probando conexión…');const t=Date.now();let p;try{p=new Peer()}catch(e){return ask('Error al iniciar la conexión.',()=>{})}
+ const to=setTimeout(()=>{try{p.destroy()}catch(e){}ask('❌ El servidor online no respondió en 15 s. Puede estar caído o bloqueado en tu red. Prueba con datos móviles u otro wifi.',()=>{})},15000);
+ p.on('open',()=>{clearTimeout(to);p.destroy();ask('✅ Conexión online correcta ('+(Date.now()-t)+' ms). Ya puedes jugar online.',()=>{})});
+ p.on('error',e=>{clearTimeout(to);try{p.destroy()}catch(x){}ask('❌ Error: '+e.type+'. El servidor online no responde o está bloqueado en esta red.',()=>{})})}
 function settings(){app.innerHTML=bar(1)+`<h2>Ajustes</h2><div class="item L"><div class="set"><span>Velocidad de los bots</span>${seg('speed',[['Lenta',1.6],['Normal',1],['Rápida',.5]])}</div>
 <div class="set"><span>Intro "VS" al empezar</span>${seg('vs',[['Sí',1],['No',0]])}</div><div class="set"><span>Ordenar mano al robar</span>${seg('auto',[['Sí',1],['No',0]])}</div>
-<div class="set"><span>Tamaño de cartas</span>${seg('size',[['Pequeño',.85],['Normal',1],['Grande',1.2]])}</div><div class="set"><span>Sonido</span>${seg('snd',[['Sí',1],['No',0]])}</div><div class="set"><span>Ayudas visuales (grupos y parejas)</span>${seg('hint',[['Sí',1],['No',0]])}</div><div class="set"><span>Confirmar al abandonar</span>${seg('conf',[['Sí',1],['No',0]])}</div></div>
+<div class="set"><span>Tamaño de cartas</span>${seg('size',[['Pequeño',.85],['Normal',1],['Grande',1.2]])}</div><div class="set"><span>Conexión online</span><button onclick="testNet()">Probar conexión</button></div><div class="set"><span>Sonido</span>${seg('snd',[['Sí',1],['No',0]])}</div><div class="set"><span>Ayudas visuales (grupos y parejas)</span>${seg('hint',[['Sí',1],['No',0]])}</div><div class="set"><span>Confirmar al abandonar</span>${seg('conf',[['Sí',1],['No',0]])}</div></div>
 <div class="item L" style="margin-top:10px"><h2>💾 Guardado</h2><b>Exportar</b><small> — copia este código y guárdalo donde quieras</small><textarea id="sv" rows="3" readonly>${enc()}</textarea><button class="pri" onclick="cp()">Copiar código</button>
 <p><b>Importar</b><small> — pega aquí un código exportado</small></p><textarea id="im" rows="3" placeholder="Pega tu código…"></textarea><div class="row" style="justify-content:flex-start"><button onclick="imp()">Importar partida</button><button onclick="ask('Se borrará TODO tu progreso. ¿Seguro?',()=>{S=DEF();rollSeason();save();ap();settings()})">Borrar progreso</button></div></div>`}
 function abn(){S.set.conf?ask('¿Abandonar? Cuenta como derrota',quit):quit()}
-let ON=null,CH=[],unread=0;
+let ON=null,CH=[],unread=0,LE='';
 const sn=(x,n=14)=>String(x??'').replace(/[<>&"'`]/g,'').slice(0,n);
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const QP=['¡Buena jugada!','¡Cuidado!','Gracias','¡Qué suerte!','😂','👏','😱','GG'],BP=['😂','¡Vaya!','Casi...','Jajaja','¡Buena!','Mmm...','👏','¡Rápido!'];
@@ -164,14 +187,14 @@ const sayI=()=>{const e=$('#ci');if(say(e.value))e.value=''};
 function botSay(p,m){m=m||BP[rnd(0,7)];chatAdd(p.name,m);bc({t:'chat',n:p.name,m})}
 /* ---- Online (PeerJS, anfitrión autoritativo) ---- */
 function leaveOn(){if(ON){clearTimeout(ON.mt);try{ON.peer.destroy()}catch(e){}ON=null}}
-function okP(){if(typeof Peer=='undefined'){toast('Online no disponible aquí: sube el juego a tu hosting (Vercel)');return false}return true}
-function fail(){toast('No se pudo conectar. Online funciona al alojar el juego fuera de Claude');leaveOn();onl()}
+function okP(){if(typeof Peer=='undefined'){toast('No se pudo cargar el componente online. Revisa tu internet o el bloqueador de anuncios');return false}return true}
+function fail(){const e=LE||'sin respuesta';leaveOn();onl();ask('No se pudo conectar con el servidor online ('+e+'). Puede ser tu red o que el servidor esté caído. Si estás en España y hay partido de LaLiga, algunas operadoras bloquean estos servidores. Prueba con otra red (datos móviles o wifi distinto) o en otro momento.',()=>{})}
 function onl(){leaveOn();app.innerHTML=bar(1)+`<h2>🌐 Jugar online</h2><div class="item L"><p>Juega con amigos con un código de sala (conexión directa entre navegadores). Los asientos libres los ocupan bots. Si el anfitrión sale, la sala se cierra.</p><div class="row" style="justify-content:flex-start"><button class="pri" onclick="host()">Crear sala</button></div><p>O únete con un código:</p><div class="row" style="justify-content:flex-start"><input id="rc" maxlength="5" placeholder="CÓDIGO" style="text-transform:uppercase;width:130px"><button onclick="joinR()">Unirse</button></div></div>`}
 function host(cid,mm){if(!okP())return;const code=cid||Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(0,31)]).join('');
  const pe=new Peer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0,mm:mm||0,mode:mm||''};CH=[];G=null;chatUI();
- const t=setTimeout(()=>{if(ON&&ON.peer===pe&&!ON.open){if(mm)mmFail(mm);else fail()}},8000);
+ const t=setTimeout(()=>{if(ON&&ON.peer===pe&&!ON.open){if(mm)mmFail(mm);else fail()}},15000);
  pe.on('open',()=>{clearTimeout(t);ON.open=1;lobbyBcast();if(mm)ON.mt=setTimeout(()=>{if(ON&&!ON.started)startOnline()},12000)});
- pe.on('error',e=>{if(ON&&ON.peer===pe&&!ON.open){clearTimeout(t);if(mm){leaveOn();return e.type=='unavailable-id'?mmGo(mm):mmFail(mm)}fail()}});
+ pe.on('error',e=>{LE=e.type;if(ON&&ON.peer===pe&&!ON.open){clearTimeout(t);if(mm){leaveOn();return e.type=='unavailable-id'?mmGo(mm):mmFail(mm)}fail()}});
  pe.on('connection',c=>{const k=[1,2,3].find(i=>!ON.conns[i]);if(!k||ON.started){c.on('open',()=>{c.send({t:'full'});setTimeout(()=>c.close(),400)});return}
   ON.conns[k]=c;c.on('data',m=>hMsg(k,m));c.on('close',()=>hLeft(k))})}
 const MMK=8;
@@ -180,8 +203,8 @@ function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pr
  ON={role:'c',peer:pe,mm:mode};CH=[];G=null;chatUI();
  app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:380px;margin:auto"><div style="font-size:2.5rem">🔎</div><p>Buscando jugadores reales… si no hay, te acompañarán bots.</p><button onclick="menu()">Cancelar</button></div>`;
  let cur=null;const dead=()=>!ON||ON.peer!==pe;
- const t0=setTimeout(()=>{if(!dead()&&!pe.open)mmFail(mode)},8000);
- pe.on('error',e=>{if(dead())return;if(e.type=='peer-unavailable'){cur&&cur('none')}else if(!ON.open)mmFail(mode)});
+ const t0=setTimeout(()=>{if(!dead()&&!pe.open)mmFail(mode)},15000);
+ pe.on('error',e=>{if(dead())return;LE=e.type;if(e.type=='peer-unavailable'){cur&&cur('none')}else if(!ON.open)mmFail(mode)});
  pe.on('open',()=>{clearTimeout(t0);try1()});
  function try1(){if(dead())return;if(slot>MMK){slot=1;return setTimeout(try1,2500)}
   const c=pe.connect('remigio-'+code(slot),{reliable:true});let d=0;
@@ -208,9 +231,9 @@ function view(k){const R=a=>a.map((_,j)=>a[(k+j)%4]);return {mode:G.mode,turn:(G
 function bcast(){if(!ON||!ON.conns||!G)return;ON.conns.forEach((c,k)=>{if(c&&c.open){const m={t:'state',v:view(k)};if(ON.sendIntro)m.intro=1;c.send(m)}});ON.sendIntro=0}
 function joinR(){if(!okP())return;const code=($('#rc').value||'').trim().toUpperCase();if(code.length!=5)return toast('El código tiene 5 caracteres');
  const pe=new Peer();ON={role:'c',peer:pe,code};CH=[];G=null;chatUI();app.innerHTML=bar(1)+'<div class="sub">Conectando…</div>';
- const t=setTimeout(()=>{if(ON&&!ON.open)fail()},8000);
+ const t=setTimeout(()=>{if(ON&&!ON.open)fail()},15000);
  pe.on('open',()=>{const c=pe.connect('remigio-'+code,{reliable:true});ON.conn=c;c.on('open',()=>{clearTimeout(t);ON.open=1;c.send({t:'join',p:me()})});c.on('data',cMsg);c.on('close',()=>{if(ON&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}})});
- pe.on('error',()=>{if(ON&&!ON.open){clearTimeout(t);fail()}})}
+ pe.on('error',e=>{LE=e.type;if(ON&&!ON.open){clearTimeout(t);fail()}})}
 function cMsg(m){if(!m||typeof m!='object')return;
  if(m.t=='lobby')lobbyR(sn(m.code,5),(m.names||[]).map(n=>sn(n)),0);
  else if(m.t=='chat'){const mm=sn(m.m,80);if(mm)chatAdd(sn(m.n)||'?',mm)}
@@ -254,22 +277,52 @@ const GC=['#4cd964','#4aa3ff','#ffb020','#ff6fb5','#b266ff'],PC2=['#ffd54a','#ff
 function marks(h){const k=h.map(c=>c.id).sort().join();if(MC.k==k)return MC.v;const v={},used=new Set();
  part(h).forEach((m,gi)=>h.forEach((c,i)=>{if(m>>i&1){v[c.id]={cl:'gr',col:GC[gi%5]};used.add(i)}}));
  const rest=h.map((c,i)=>i).filter(i=>!used.has(i)&&h[i].s>=0),pu=new Set();let pi=0;
- for(let a=0;a<rest.length;a++)for(let b=a+1;b<rest.length;b++){const x=h[rest[a]],y=h[rest[b]];if(pu.has(x.id)||pu.has(y.id))continue;if((x.v==y.v&&x.s!=y.s)||(x.s==y.s&&x.v!=y.v&&Math.abs(x.v-y.v)<=2)){const col=PC2[pi++%4];v[x.id]={cl:'pr',col};v[y.id]={cl:'pr',col};pu.add(x.id);pu.add(y.id)}}
+ for(let a=0;a<rest.length;a++)for(let b=a+1;b<rest.length;b++){const x=h[rest[a]],y=h[rest[b]];if(pu.has(x.id)||pu.has(y.id))continue;if((x.v==y.v&&x.s!=y.s)||(x.s==y.s&&x.v!=y.v&&dv(x.v,y.v)<=2)){const col=PC2[pi++%4];v[x.id]={cl:'pr',col};v[y.id]={cl:'pr',col};pu.add(x.id);pu.add(y.id)}}
  MC={k,v};return v}
 /* tutorial */
 const TS=[['¡Bienvenido a Superremigio!','Gana quien primero ordene sus <b>10 cartas</b> en grupos de 3 o más. Hay 4 palos (🪙 🏆 ⚔️ 🌿), valores 1 al 9, S (Sota), C (Caballo) y R (Rey), y 4 comodines.',[[0,1],[1,8],[2,9],[3,12],[-1,0]]],
 ['Tu turno','En cada turno <b>robas 1 carta</b> (del mazo boca abajo o la última del pozo) y después <b>descartas 1</b>. Tocas la carta para elegirla y pulsas «Descartar».',['B',[0,5]]],
 ['Tríos y cuartetos','Mismo número y <b>palos distintos</b>. Valen 3 o 4 cartas.',[[0,7],[1,7],[2,7]]],
-['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, 8, 9, S, C, R; el 1 es el más bajo.',[[1,3],[1,4],[1,5],[1,6]]],
+['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, 8, 9, S, C, R y <b>después del Rey vuelve el 1</b>: la escalera puede dar la vuelta, por ejemplo C, R, 1, 2.',[[1,11],[1,12],[1,1],[1,2]]],
 ['El comodín','Un 🃏 sustituye a cualquier carta. Puedes poner <b>hasta dos por grupo</b>: con dos comodines basta <b>una sola carta real</b> para hacer un trío o una escalera.',[[0,4],[-1,0],[0,6],[2,9],[-1,0],[-1,0]]],
 ['Cómo se gana','Cuando tras descartar tus 10 cartas queden todas en grupos (por ejemplo 3+3+4), <b>cierras y ganas</b>. Ojo: <b>no se puede cerrar en la primera ronda</b>.',[[0,7],[1,7],[2,7],[3,2],[3,3],[3,4]]],
 ['Ayudas y tiempo','Subrayado <b>sólido de color</b> = grupo ya formado. Subrayado <b>punteado</b> = pareja que busca una carta. Si la carta del pozo te sirve, brilla en verde. Tienes <b>60 segundos por turno</b>. Reordena tus cartas arrastrando o con ◀ ▶, y usa 💬 para el chat. Puedes desactivar las ayudas y el sonido en Ajustes.',[[2,5],[2,6]]]];
 function tut(i=0){const T=TS[i];let o=$('#tut');if(!o){o=document.createElement('div');o.id='tut';o.className='ov';document.body.appendChild(o)}
  o.innerHTML=`<div class="box"><div class="sub">Tutorial ${i+1}/${TS.length}</div><h2>${T[0]}</h2><div class="row" style="margin:10px 0">${T[2].map(c=>c=='B'?back(S.deck):cardH({s:c[0],v:c[1]},'',S.deck)).join('')}</div><p style="text-align:left">${T[1]}</p><div class="row">${i?`<button onclick="tut(${i-1})">←</button>`:''}${i<TS.length-1?`<button class="pri" onclick="tut(${i+1})">Siguiente</button>`:'<button class="pri" onclick="tutEnd()">¡A jugar!</button>'}<button onclick="tutEnd()">Saltar</button></div></div>`}
 function tutEnd(){const o=$('#tut');o&&o.remove();S.tut=1;save()}
+/* ---- Firebase: cuentas, guardado en la nube y ranking ---- */
+const FB_CONFIG={apiKey:"AIzaSyAEPzpAjQsQ18QEvFgAaep38w-Y0u6rLMA",authDomain:"superremigio-adfaa.firebaseapp.com",projectId:"superremigio-adfaa",storageBucket:"superremigio-adfaa.firebasestorage.app",messagingSenderId:"973039326576",appId:"1:973039326576:web:4141bbc9bbb4c88788ebb5"}; /* pega aquí la configuración de tu proyecto Firebase: {apiKey:"...",authDomain:"...",projectId:"...",appId:"..."} */
+let FB=null,U=null,CT=null;
+function fbInit(){if(FB)return true;if(!FB_CONFIG||typeof firebase=='undefined')return false;try{firebase.initializeApp(FB_CONFIG);FB={a:firebase.auth(),d:firebase.firestore()};FB.a.onAuthStateChanged(u=>{U=u;if(u)cloudLoad();else if($('#acu'))acct()});return true}catch(e){return false}}
+const fe=e=>toast({'auth/email-already-in-use':'Ese usuario ya existe','auth/wrong-password':'Contraseña incorrecta','auth/invalid-credential':'Usuario o contraseña incorrectos','auth/user-not-found':'No existe ese usuario','auth/network-request-failed':'Sin conexión con el servidor','auth/too-many-requests':'Demasiados intentos, espera un poco'}[e.code]||'Error: '+(e.code||e.message));
+const em=n=>n+'@superremigio.game',creds=()=>{const n=($('#un').value||'').trim().toLowerCase(),p=$('#pw').value||'';if(!/^[a-z0-9_]{3,14}$/.test(n)){toast('Usuario: 3-14 letras minúsculas, números o _');return null}if(p.length<6){toast('La contraseña necesita 6 caracteres como mínimo');return null}return [n,p]};
+function reg(){const c=creds();if(!c)return;FB.a.createUserWithEmailAndPassword(em(c[0]),c[1]).then(r=>r.user.updateProfile({displayName:c[0]}).then(()=>{U=FB.a.currentUser;S.uid=U.uid;S.name=c[0];save();cloudSave();toast('Cuenta creada ☁️');acct()})).catch(fe)}
+function login(){const c=creds();if(!c)return;FB.a.signInWithEmailAndPassword(em(c[0]),c[1]).catch(fe)}
+function logout(){FB.a.signOut().then(()=>{toast('Sesión cerrada');acct()})}
+function forceUp(){if(!U)return;ask('Se sustituirá el progreso guardado en tu cuenta por el de este dispositivo. ¿Seguro?',()=>{S.uid=U.uid;cloudSave();toast('Progreso subido ☁️');acct()})}
+function cloudSoon(){if(!U||S.uid!=U.uid)return;clearTimeout(CT);CT=setTimeout(cloudSave,3000)}
+function cloudSave(){if(!FB||!U||S.uid!=U.uid)return;S.ts=Date.now();const b=FB.d.batch();b.set(FB.d.collection('users').doc(U.uid),{s:JSON.stringify(S),ts:S.ts});
+ if(S.rg>0)b.set(FB.d.collection('rank'+S.season).doc(U.uid),{n:U.displayName||S.name,pts:S.pts|0,w:S.wins|0,t:S.title?tn(S.title):'',ts:S.ts});b.commit().catch(e=>toast('☁️ No se pudo guardar ('+(e.code||'error')+')'))}
+function cloudLoad(){FB.d.collection('users').doc(U.uid).get().then(d=>{
+ const use=o=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);S.uid=U.uid;S.name=U.displayName||S.name;rollSeason();ap();try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}toast('☁️ Progreso cargado');menu()};
+ if(!d.exists){S.uid=U.uid;S.name=U.displayName||S.name;save();cloudSave();if($('#acu'))acct();return}
+ const c=JSON.parse(d.data().s),ts=d.data().ts||0;
+ if(S.uid==U.uid){if(ts>(S.ts||0))use(c);else{cloudSave();if($('#acu'))acct()}}
+ else if(S.uid)use(c);
+ else ask('Esta cuenta ya tiene progreso guardado. Aceptar: usar el de la cuenta (reemplaza el de este dispositivo). Cancelar: conservar el de este dispositivo sin subirlo.',()=>use(c))
+ }).catch(e=>toast('No se pudo cargar tu progreso ('+(e.code||'error')+')'))}
+function acct(){const h=bar(1)+'<h2>☁️ Cuenta</h2>';
+ if(!FB_CONFIG)return app.innerHTML=h+'<div class="item L"><p>Las cuentas online aún no están configuradas en esta versión.</p></div>';
+ if(!fbInit())return app.innerHTML=h+'<div class="item L"><p>No se pudo cargar el servicio de cuentas (Firebase). Revisa tu conexión o el bloqueador de anuncios.</p></div>';
+ app.innerHTML=h+`<div id="acu" class="item L">${U?`<p>Sesión iniciada como <b>${sn(U.displayName||S.name)}</b>. Tu progreso (monedas, barajas, títulos, misiones…) se guarda solo en la nube.</p><div class="row" style="justify-content:flex-start"><button class="pri" onclick="cloudSave();toast('Guardado ☁️')">Guardar ahora</button><button onclick="forceUp()">Subir este dispositivo</button><button onclick="logout()">Cerrar sesión</button></div>`:`<p>Crea una cuenta con usuario y contraseña para guardar tu progreso y salir en el ranking.</p><div class="row" style="justify-content:flex-start;flex-direction:column;align-items:stretch"><input id="un" placeholder="Usuario (3-14 letras, números o _)" maxlength="14" autocapitalize="none" autocomplete="username"><input id="pw" type="password" placeholder="Contraseña (mín. 6)" autocomplete="current-password"></div><div class="row" style="justify-content:flex-start"><button class="pri" onclick="login()">Entrar</button><button onclick="reg()">Crear cuenta</button></div><p class="sub" style="text-align:left">No hay recuperación de contraseña: guárdala bien.</p>`}</div>`}
+function ranking(){app.innerHTML=bar(1)+`<h2>🏆 Ranking · Temporada ${S.season}</h2><div id="rk" class="sub">Cargando…</div>`;
+ if(!FB_CONFIG||!fbInit()){$('#rk').textContent='El ranking online no está disponible en esta versión.';return}
+ FB.d.collection('rank'+S.season).orderBy('pts','desc').limit(50).get().then(q=>{const r=[];q.forEach(d=>r.push(Object.assign({id:d.id},d.data())));const e=$('#rk');if(!e)return;
+  e.outerHTML=r.length?`<div class="item L">${r.map((x,i)=>{const k=RANKS[Math.min(6,Math.floor((x.pts||0)/100))];return `<div class="set" style="${U&&x.id==U.uid?'background:#f2c94c22':''}"><span>${i+1}. <b>${sn(x.n)}</b> ${x.t?`<span class="tt">«${sn(x.t,30)}»</span>`:''}</span><span style="color:${k[1]}">${k[0]} · ${x.pts|0} pts</span></div>`}).join('')}</div>${U?'':'<p class="sub">Inicia sesión en ☁️ Cuenta para aparecer aquí.</p>'}`:'<div class="sub">Aún no hay nadie esta temporada. Juega una Clasificatoria con tu cuenta iniciada.</div>'
+ }).catch(x=>{const e=$('#rk');if(e)e.textContent='No se pudo cargar el ranking ('+(x.code||'error')+')'})}
 function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 48 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
 <div class="tiles"><button class="tile big pri" onclick="search('quick')"><b>⚡ Partida Rápida</b><small>4 jugadores · sin rango</small></button><button class="tile big" onclick="search('rank')"><b>🏅 Clasificatoria</b><small>Temporada ${S.season} · quedan ${daysLeft()} días</small></button>
-<button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="tut(0)"><b>🎓 Tutorial</b></button></div>`}
+<button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="ranking()"><b>🏆 Ranking</b></button><button class="tile" onclick="acct()"><b>☁️ Cuenta</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="tut(0)"><b>🎓 Tutorial</b></button></div>`}
 function rules(){app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Reglas</h2><p>Cada jugador recibe <b>10 cartas</b>. En tu turno <b>robas 1</b> (mazo o pozo) y <b>descartas 1</b>.</p><p><b>Cierras</b> cuando, al descartar, las 10 cartas restantes están en grupos de mínimo 3 (ej. 3-3-4):</p><ul><li><b>Trío/Cuarteto:</b> mismo número, palos distintos.</li><li><b>Escalera:</b> 3+ cartas consecutivas del mismo palo (1-7, Sota, Caballo, Rey). El 1 es el más bajo.</li><li><b>Comodín 🃏:</b> sustituye cualquier carta; máximo 1 por grupo.</li></ul><p>S = Sota, C = Caballo, R = Rey. Gana la primera persona que cierre. Victoria: +2 monedas.</p></div>`}
 function profile(){const r=rank();app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Perfil</h2><div class="row" style="justify-content:flex-start"><button onclick="S.av=(S.av+1)%AV.length;save();profile()" style="font-size:2rem">${AV[S.av]}</button><input value="${S.name}" maxlength="14" onchange="S.name=this.value||'Jugador';save();profile()"></div>
 <p>Partidas: ${S.games} · Victorias: ${S.wins} · Mejor racha: ${S.bs}</p><p>Temporada ${S.season} (quedan ${daysLeft()} días)</p><p style="font-size:12px">${Object.entries(S.hist).map(([k,v])=>'T'+k+': '+RANKS[v][0]).join(' · ')}</p><p style="color:${r[1]}">Rango: ${r[0]} (${S.pts} pts)</p><div class="prog"><i style="width:${S.pts%100}%"></i></div>
@@ -277,24 +330,34 @@ function profile(){const r=rank();app.innerHTML=bar(1)+`<div class="item" style=
 function mission(k){S.m[k]=(S.m[k]||0)+1;mev(k)}
 const pv=id=>`<div class="pv">${back(id)}${cardH({s:0,v:7},'',id)}</div>`;
 const back=(d,c='')=>`<div class="card back ${c}" style="background:${dk(d).bg}"><i>${dk(d).em}</i></div>`;
-function decks(){app.innerHTML=bar(1)+`<h2>Edición de mazo</h2><div class="grid">${DECKS.filter(d=>S.owned.includes(d.id)).map(d=>`<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><br><button ${S.deck===d.id?'disabled':''} onclick="S.deck='${d.id}';save();decks()" style="margin-top:6px">${S.deck===d.id?'Equipado':'Equipar'}</button></div>`).join('')}</div>`}
-function shop(){const it=d=>{const o=S.owned.includes(d.id);let b;if(o)b='<button disabled>Adquirido</button>';else if(d.r=='X')b='<button disabled>🔒 '+(d.id=='cam'?'Llega a Campeón':'Llega a Real')+'</button>';else if(d.r=='V'&&!halOn())b='<button disabled>Terminado</button>';else b=`<button onclick="buy('${d.id}')">${RAR[d.r][2]} 🪙</button>`;return `<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><div style="margin-top:6px">${b}</div></div>`};
-app.innerHTML=bar(1)+`<h2>Tienda</h2><div class="item" style="margin-bottom:10px"><b>🎁 Sobre sorpresa — 20 🪙</b><div style="color:var(--mut);font-size:12px">Común 60% · Rara 25% · Épica 11% · Legendaria 4% (duplicado = 5 🪙)</div><button class="pri" onclick="pack()" style="margin-top:6px">Abrir sobre</button></div>
-<h2>⭐ Especiales</h2>${halOn()?`<div class="ev">🎃 Evento de Halloween · quedan ${Math.ceil((new Date(2026,9,31,23,59,59)-Date.now())/864e5)} días</div>`:''}<div class="grid">${DECKS.filter(d=>d.r=='X'||(d.r=='V'&&(halOn()||S.owned.includes(d.id)))).map(it).join('')}</div><h2>Barajas</h2><div class="grid">${DECKS.filter(d=>!'VX'.includes(d.r)).map(it).join('')}</div>`}
+function decks(){const eq=(own,cur,f,n,pvw,id,r)=>'';
+ app.innerHTML=bar(1)+`<h2>Barajas</h2><div class="grid">${DECKS.filter(d=>S.owned.includes(d.id)).map(d=>`<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><br><button ${S.deck===d.id?'disabled':''} onclick="S.deck='${d.id}';save();decks()" style="margin-top:6px">${S.deck===d.id?'Equipada':'Equipar'}</button></div>`).join('')}</div>
+<h2 style="margin-top:16px">Fondos</h2><div class="grid">${BGS.filter(b=>S.bgs.includes(b.id)).map(b=>`<div class="item"><div class="pv"><div style="width:96px;height:62px;border-radius:8px;border:3px solid ${b.bd};background:${b.t}"></div></div><b>${b.n}</b><br><span class="tag" style="color:${RAR[b.r][1]}">${RAR[b.r][0]}</span><br><button ${S.bg===b.id?'disabled':''} onclick="S.bg='${b.id}';save();ap();decks()" style="margin-top:6px">${S.bg===b.id?'Equipado':'Equipar'}</button></div>`).join('')}</div>`}
+function shop(){const bt=(o,d,f)=>o?'<button disabled>Adquirido</button>':d.r=='X'?'<button disabled>🔒 '+(d.id=='cam'?'Llega a Campeón':'Llega a Real')+'</button>':d.r=='V'&&!halOn()?'<button disabled>Terminado</button>':`<button onclick="${f}('${d.id}')">${RAR[d.r][2]} 🪙</button>`;
+ const tg=d=>`<span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span>`;
+ const it=d=>`<div class="item">${pv(d.id)}<b>${d.n}</b><br>${tg(d)}<div style="margin-top:6px">${bt(S.owned.includes(d.id),d,'buy')}</div></div>`;
+ const ib=d=>`<div class="item"><div class="pv"><div style="width:96px;height:62px;border-radius:8px;border:3px solid ${d.bd};background:${d.t}"></div></div><b>${d.n}</b><br>${tg(d)}<div style="margin-top:6px">${bt(S.bgs.includes(d.id),d,'buyB')}</div></div>`;
+ const spD=DECKS.filter(d=>d.r=='X'||(d.r=='V'&&(halOn()||S.owned.includes(d.id)))),spB=BGS.filter(b=>b.r=='X'||(b.r=='V'&&(halOn()||S.bgs.includes(b.id))));
+ app.innerHTML=bar(1)+`<h2>Tienda</h2><div class="item" style="margin-bottom:10px"><b>🎁 Sobre sorpresa — 20 🪙</b><div style="color:var(--mut);font-size:12px">Una baraja o un fondo al azar · Común 60% · Rara 25% · Épica 11% · Legendaria 4% (duplicado = 5 🪙)</div><button class="pri" onclick="pack()" style="margin-top:6px">Abrir sobre</button></div>
+<h2>⭐ Especiales</h2>${halOn()?`<div class="ev">🎃 Evento de Halloween · hasta el 31 de octubre (quedan ${Math.ceil((new Date(2026,9,31,23,59,59)-Date.now())/864e5)} días)</div>`:''}<div class="grid">${spD.map(it).join('')}${spB.map(ib).join('')}</div>
+<h2>Barajas</h2><div class="grid">${DECKS.filter(d=>!'VX'.includes(d.r)).map(it).join('')}</div><h2>Fondos</h2><div class="grid">${BGS.filter(b=>!'VX'.includes(b.r)).map(ib).join('')}</div>`}
+function buyB(id){const d=bgd(id),p=RAR[d.r][2];if(d.r=='X'||(d.r=='V'&&!halOn()))return;if(S.coins<p)return toast('Monedas insuficientes');S.coins-=p;S.bgs.push(id);save();toast('¡Fondo '+d.n+' conseguido!');shop()}
 function buy(id){const d=dk(id),p=RAR[d.r][2];if(d.r=='X'||(d.r=='V'&&!halOn()))return;if(S.coins<p)return toast('Monedas insuficientes');S.coins-=p;S.owned.push(id);save();toast('¡'+d.n+' conseguida!');shop()}
-function pack(){if(S.coins<20)return toast('Monedas insuficientes');S.coins-=20;let x=rnd(1,100),r=x<=60?'C':x<=85?'R':x<=96?'E':'L';const l=DECKS.filter(d=>d.r===r),d=l[rnd(0,l.length-1)];
- if(S.owned.includes(d.id)){S.coins+=5;toast('Duplicado '+d.n+': +5 🪙')}else{S.owned.push(d.id);toast('¡Nueva baraja: '+d.n+'!')}save();shop()}
+function pack(){if(S.coins<20)return toast('Monedas insuficientes');S.coins-=20;const x=rnd(1,100),r=x<=60?'C':x<=85?'R':x<=96?'E':'L',l=[].concat(DECKS.filter(d=>d.r===r).map(d=>['d',d]),BGS.filter(b=>b.r===r).map(b=>['b',b])),[k,d]=l[rnd(0,l.length-1)],own=k=='d'?S.owned:S.bgs;
+ if(own.includes(d.id)){S.coins+=5;toast('Duplicado '+d.n+': +5 🪙')}else{own.push(d.id);toast('¡Nuevo '+(k=='d'?'mazo':'fondo')+': '+d.n+'!')}save();shop()}
 /* ---------- Lógica de reglas ---------- */
 const cnt=m=>{let c=0;while(m){c+=m&1;m>>=1}return c};
 function okGroup(g){const n=g.length;if(n<3)return false;const J=g.filter(c=>c.s<0).length;if(J>2)return false;const a=g.filter(c=>c.s>=0),m=a.length;
  if(n<=4&&new Set(a.map(c=>c.v)).size==1&&new Set(a.map(c=>c.s)).size==m)return true;
- if(new Set(a.map(c=>c.s)).size==1&&new Set(a.map(c=>c.v)).size==m){const vs=a.map(c=>c.v),mn=Math.min(...vs),mx=Math.max(...vs),need=mx-mn+1-m;if(need>J)return false;return J-need<=(mn-1)+(12-mx)}
+ if(new Set(a.map(c=>c.s)).size==1&&runOk(a,J))return true;
  return false}
+function runOk(a,J){const vs=a.map(c=>c.v).sort((x,y)=>x-y);if(new Set(vs).size!=vs.length)return false;const m=vs.length;let mg=vs[0]+12-vs[m-1];for(let i=1;i<m;i++)mg=Math.max(mg,vs[i]-vs[i-1]);return (12-mg+1)-m<=J}
+function dv(a,b){const d=Math.abs(a-b);return Math.min(d,12-d)}
 function cover(h){const n=h.length,V=new Map(),memo={},by=Array.from({length:n},()=>[]);
  for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];for(let i=0;i<n;i++)if(m>>i&1)g.push(h[i]);if(okGroup(g))by[31-Math.clz32(m&-m)].push(m)}
  const f=m=>{if(!m)return 0;if(memo[m]!==undefined)return memo[m];const lo=31-Math.clz32(m&-m);let b=f(m&(m-1));for(const g of by[lo])if((g&m)===g)b=Math.max(b,cnt(g)+f(m&~g));return memo[m]=b};
  return f((1<<n)-1)}
-function pot(h){let p=0;for(let i=0;i<h.length;i++)for(let j=i+1;j<h.length;j++){const a=h[i],b=h[j];if(a.s<0||b.s<0)p+=2;else if(a.v==b.v&&a.s!=b.s)p+=1;else if(a.s==b.s&&Math.abs(a.v-b.v)<=2&&a.v!=b.v)p+=1}return p}
+function pot(h){let p=0;for(let i=0;i<h.length;i++)for(let j=i+1;j<h.length;j++){const a=h[i],b=h[j];if(a.s<0||b.s<0)p+=2;else if(a.v==b.v&&a.s!=b.s)p+=1;else if(a.s==b.s&&dv(a.v,b.v)<=2&&a.v!=b.v)p+=1}return p}
 const ev=(h,l)=>cover(h)*10+(l==2?pot(h):0);
 function bestDisc(h,l){let best=-1,bi=[];h.forEach((c,i)=>{const r=h.filter((_,k)=>k!=i),e=ev(r,l);if(e>best){best=e;bi=[i]}else if(e==best)bi.push(i)});return {i:bi[rnd(0,bi.length-1)],e:best}}
 /* ---------- Partida ---------- */
@@ -347,8 +410,8 @@ function end(w){G.over=true;clearTimeout(G.tt);if(ON&&ON.role=='h')ON.conns.forE
 function finish(w){const ranked=G.mode=='rank',won=w==0;let info='';S.games++;mission('play');
  if(won){S.wins++;S.coins+=2;mission('win');info='+2 🪙';if(G.pl[0].hand.some(c=>c.s<0))mission('joker')}
  if(ranked){const real=S.pts>=600;if(won){const d=real?10:rnd(10,20);S.pts+=d;info+=` · +${d} pts`}else{const d=real?5:rnd(3,5);S.pts=Math.max(0,S.pts-d);info+=` · −${d} pts`}}
- if(w>=0)snd(won?'win':'lose');if(ranked){mev('ranked');if(won)mev('rwin')}if(ON)mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
+ if(w>=0)snd(won?'win':'lose');if(ranked){S.rg=(S.rg||0)+1;mev('ranked');if(won)mev('rwin')}if(ON)mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
  o.innerHTML=`<div class="box"><h2>${w<0?'Has abandonado':won?'🎉 ¡Has ganado!':'Gana '+G.pl[w].name}</h2>${w>=0?`<div class="hand" style="padding-top:6px">${sortH(G.pl[w].hand).map(c=>cardH(c,'',G.pl[0].deck)).join('')}</div>`:''}<p>${info||'Sin recompensa'}</p><button class="pri" onclick="this.closest('.ov').remove();menu()">Volver al menú</button></div>`;
  document.body.appendChild(o);if(w>=0)table()}
-ap();rollSeason();menu();if(!S.tut)tut(0);
+ap();rollSeason();menu();if(!S.tut)tut(0);fbInit();
 </script></body></html>
