@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacha RPG | Ajustes</title>
+    <!-- Fuentes Gamer Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 120px auto 40px auto;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+        }
+
+        .settings-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #00f2fe;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(0, 242, 254, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .settings-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .settings-section.dev-section {
+            border: 1px dashed rgba(0, 242, 254, 0.5);
+            background: rgba(0, 242, 254, 0.03);
+        }
+
+        .settings-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+
+        .settings-section p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .btn-dev {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #0f172a;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.3);
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-dev:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 242, 254, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e11d48, #9f1239);
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #f43f5e, #be123c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(225, 29, 72, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo Animado de Partículas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- BANNER SUPERIOR DE NAVEGACIÓN -->
+    <header class="top-header">
+        <div class="logo-title">
+            <span class="game-tag">GACHATARA</span>
+        </div>
+
+        <!-- CONTADOR DE MONEDAS -->
+        <div class="currencies-bar">
+            <div class="currency-item" title="Tickets de Invocación">
+                <span class="currency-icon">🎟️</span>
+                <span id="currency-tickets" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Esquirlas Coloridas">
+                <span class="currency-icon">💎</span>
+                <span id="currency-shards" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Monedas Tara">
+                <span class="currency-icon">🪙</span>
+                <span id="currency-coins" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Masterballs">
+                <span class="currency-icon"><img class="currency-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Masterballs" onerror="this.replaceWith(document.createTextNode('🟣'))"></span>
+                <span id="currency-masterballs" class="currency-amount">0</span>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <a href="index.html" class="nav-tab nav-link">Volver al Juego</a>
+            <span class="nav-tab active">Ajustes</span>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO DE AJUSTES -->
+    <main class="settings-container">
+        <h1 class="settings-title">AJUSTES DEL JUEGO</h1>
+
+        <!-- Sección: Panel de Desarrollador / Pruebas -->
+        <section class="settings-section dev-section">
+            <h3>🛠️ Modo Desarrollador (Pruebas)</h3>
+            <p>Añade recursos a tu cuenta instantáneamente para probar tiradas en el Gacha.</p>
+            <button class="btn-dev" onclick="addTickets(1000)">+1000 Tickets 🎟️</button>
+            <button class="btn-dev" onclick="addCoins(5000)">+5000 Monedas 🪙</button>
+            <button class="btn-dev" onclick="addCandies(100)">+100 Caramelos Raros 🍬</button>
+            <button class="btn-dev" onclick="addMasterballs(50)">+50 Masterballs <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="" style="width: 18px; height: 18px; vertical-align: middle; image-rendering: pixelated;" onerror="this.remove()"></button>
+        </section>
+
+        <!-- Sección: Importar / Exportar partida -->
+        <section class="settings-section">
+            <h3>💾 Guardar y cargar partida</h3>
+            <p>Exporta tu partida a un archivo para hacer una copia de seguridad o llevarla a otro dispositivo. Al importar, se sustituirá tu partida actual por la del archivo.</p>
+            <button class="btn-dev" onclick="exportGameData()">⬇️ Exportar partida</button>
+            <button class="btn-dev" onclick="document.getElementById('import-file-input').click()">⬆️ Importar partida</button>
+            <input type="file" id="import-file-input" accept=".json,application/json" style="display: none;" onchange="importGameData(event)">
+        </section>
+
+        <!-- Sección: Gestión de Datos -->
+        <section class="settings-section">
+            <h3>Reiniciar Datos Guardados</h3>
+            <p>Borra permanentemente todo tu inventario de Pokémon capturados, tu Pokédex y el saldo de monedas. Esta acción no se puede deshacer.</p>
+            <button class="btn-danger" onclick="resetGameData()">Borrar Datos Guardados</button>
+        </section>
+    </main>
+
+    <script src="game.js"></script>
+    <script src="backpack.js"></script>
+    <script>
+        // Funciones provisionales para añadir recursos fácilmente
+        function addTickets(amount) {
+            const currencies = getCurrencies();
+            currencies.tickets = (currencies.tickets || 0) + amount;
+            saveCurrencies(currencies);
+            alert(`¡Se han añadido +${amount} Tickets! Saldo actual: ${currencies.tickets}`);
+        }
+
+        function addCoins(amount) {
+            const currencies = getCurrencies();
+            currencies.coins = (currencies.coins || 0) + amount;
+            saveCurrencies(currencies);
+            alert(`¡Se han añadido +${amount} Monedas Tara! Saldo actual: ${currencies.coins}`);
+        }
+
+        function addCandies(amount) {
+            const total = addRareCandies(amount);
+            alert(`¡Se han añadido +${amount} Caramelos Raros! Tienes ${total} en la mochila.`);
+        }
+
+        function addMasterballs(amount) {
+            const currencies = getCurrencies();
+            currencies.masterballs = (currencies.masterballs || 0) + amount;
+            saveCurrencies(currencies);
+            alert(`¡Se han añadido +${amount} Masterballs! Saldo actual: ${currencies.masterballs}`);
+        }
+
+        // ---- Importar / Exportar partida ----
+        const SAVE_KEY_PREFIXES = ['pokemon_', 'gachatara_'];
+
+        function isGameKey(key) {
+            return SAVE_KEY_PREFIXES.some(prefix => key.startsWith(prefix));
+        }
+
+        function exportGameData() {
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (isGameKey(key)) data[key] = localStorage.getItem(key);
+            }
+
+            if (Object.keys(data).length === 0) {
+                alert('No hay datos de partida que exportar.');
+                return;
+            }
+
+            const payload = { game: 'gachatara', version: 1, exportedAt: new Date().toISOString(), data: data };
+            const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `gachatara_partida_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function importGameData(event) {
+            const file = event.target.files && event.target.files[0];
+            event.target.value = '';
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                let payload;
+                try {
+                    payload = JSON.parse(reader.result);
+                } catch (e) {
+                    alert('El archivo no es válido: no se pudo leer como JSON.');
+                    return;
+                }
+
+                if (!payload || payload.game !== 'gachatara' || typeof payload.data !== 'object' || payload.data === null) {
+                    alert('Este archivo no es una partida de Gachatara.');
+                    return;
+                }
+
+                const entries = Object.entries(payload.data).filter(([key, value]) => isGameKey(key) && typeof value === 'string');
+                if (entries.length === 0) {
+                    alert('El archivo no contiene datos de partida.');
+                    return;
+                }
+
+                const when = payload.exportedAt ? new Date(payload.exportedAt).toLocaleString('es-ES') : 'fecha desconocida';
+                if (!confirm(`Vas a sustituir tu partida actual por la del archivo (exportada el ${when}). Esta acción no se puede deshacer. ¿Continuar?`)) return;
+
+                // Borra la partida actual y escribe la importada
+                const toRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (isGameKey(key)) toRemove.push(key);
+                }
+                toRemove.forEach(key => localStorage.removeItem(key));
+                entries.forEach(([key, value]) => localStorage.setItem(key, value));
+
+                alert('¡Partida importada con éxito!');
+                window.location.href = 'index.html';
+            };
+            reader.onerror = () => alert('No se pudo leer el archivo.');
+            reader.readAsText(file);
+        }
+
+        function resetGameData() {
+            const confirmReset = confirm("¿Estás seguro de que deseas borrar todos tus Pokémon capturados, tu Pokédex y tus monedas? Esta acción es irreversible.");
+            
+            if (confirmReset) {
+                localStorage.removeItem('pokemon_pokedex_collection');
+                localStorage.removeItem('pokemon_user_inventory');
+                localStorage.removeItem('pokemon_user_currencies');
+                localStorage.removeItem('gachatara_profile');
+                localStorage.removeItem('gachatara_backpack');
+                localStorage.removeItem('gachatara_shop');
+                localStorage.removeItem('gachatara_advent');
+                
+                alert("Los datos han sido borrados con éxito.");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+    <script src="layout.js"></script>
+</body>
+</html>

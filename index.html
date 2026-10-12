@@ -1,354 +1,221 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"><title>Superremigio</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%2314402e'/%3E%3Cg%20transform='rotate%28-14%2032%2036%29'%3E%3Crect%20x='13'%20y='12'%20width='26'%20height='38'%20rx='4'%20fill='%23d9d2b8'/%3E%3C/g%3E%3Cg%20transform='rotate%2812%2032%2036%29'%3E%3Crect%20x='24'%20y='12'%20width='26'%20height='38'%20rx='4'%20fill='%23fbf7ea'%20stroke='%23c9961a'%20stroke-width='2'/%3E%3Ccircle%20cx='37'%20cy='31'%20r='7.5'%20fill='%23f2c94c'%20stroke='%23b8860b'%20stroke-width='2'/%3E%3C/g%3E%3C/svg%3E"><meta name="theme-color" content="#0f2219"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Superremigio">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>
-:root{--bg:#0f2219;--pn:#1b4733;--pn2:#143427;--gold:#f2c94c;--tx:#f4f1e8;--mut:#9fb5a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
-#app{max-width:900px;margin:0 auto;padding:12px}
-h1{font-family:Georgia,serif;color:var(--gold);text-align:center;margin:8px 0 2px;font-size:2rem;letter-spacing:2px}
-h2{color:var(--gold);margin:6px 0}
-.sub{text-align:center;color:var(--mut);margin-bottom:14px}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--pn2);border-radius:10px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap}
-button{font:inherit;color:var(--tx);background:var(--pn);border:1px solid #2f6a50;border-radius:10px;padding:10px 14px;cursor:pointer}
-button:hover{background:#25594156;border-color:var(--gold)}
-button.pri{background:var(--gold);color:#222;font-weight:700;border:0}
-button:disabled{opacity:.4;cursor:default}
-.menu{display:grid;gap:10px;max-width:420px;margin:0 auto}
-.menu button{padding:16px;font-size:1.05rem;text-align:left}
-.menu small{display:block;color:var(--mut)}
-.card{width:52px;height:78px;border-radius:7px;background:#fbf7ea;color:#222;border:1px solid #888;display:inline-flex;flex-direction:column;align-items:center;justify-content:space-between;padding:3px;font-weight:700;position:relative;flex:0 0 auto;user-select:none;transition:transform .12s}
-.card .v{align-self:flex-start;font-size:14px}.card .s{font-size:24px}.card .v2{align-self:flex-end;font-size:14px;transform:rotate(180deg)}
-.card.sel{transform:translateY(-14px);outline:2px solid var(--gold)}
-.c0{color:#b8860b}.c1{color:#c0392b}.c2{color:#1f5fa8}.c3{color:#2e7d32}
-.back{border:2px solid #fff6}.back.mini{width:22px;height:32px;margin-left:-14px}
-.hand{display:flex;gap:4px;overflow-x:auto;padding:20px 6px 6px;justify-content:safe center}
-.table{background:radial-gradient(ellipse at center,#23694b,#154631);border-radius:18px;padding:10px;display:grid;grid-template-columns:1fr 2fr 1fr;grid-template-areas:". top ." "left mid right" "me me me";gap:8px;border:6px solid #5b3a1f}
-.seat{text-align:center;font-size:12px;padding:6px;border-radius:10px;background:#0003}
-.seat.act{outline:2px solid var(--gold);background:#f2c94c22}
-.seat .cs{display:flex;justify-content:center;padding-left:14px;min-height:34px;margin-top:4px}
-.mid{grid-area:mid;display:flex;gap:18px;justify-content:center;align-items:center;min-height:110px}
-.pile{text-align:center;font-size:11px;color:#d7e5dc}
-.pile .card{cursor:pointer}
-.msg{text-align:center;margin:8px 0;min-height:22px;color:var(--gold)}
-.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.item{background:var(--pn2);border-radius:12px;padding:10px;text-align:center}
-.pv{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.leg{background-size:300% 100%!important;animation:shn 3s linear infinite}@keyframes shn{to{background-position:300% 0}}.card[draggable=true]{cursor:grab}
-.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:#0006}
-.vs{position:fixed;inset:0;background:#000d;z-index:10;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.vs .p{position:absolute;width:50%;height:50%;display:flex;align-items:center;justify-content:center;transition:transform .8s cubic-bezier(.3,1.6,.5,1),opacity .8s}
-.vs .p .in{background:#0007;border-radius:14px;padding:12px 16px;text-align:center;opacity:0;transition:opacity .6s;min-width:130px}
-.vs .p.show .in{opacity:1}
-.vs .big{position:absolute;font:900 90px Georgia,serif;color:var(--gold);text-shadow:0 0 20px #f90,0 4px 0 #7a5a00;transform:scale(5);opacity:0;transition:all .35s cubic-bezier(.5,0,1,.5)}
-.vs .big.in{transform:scale(1);opacity:1}
-.shake{animation:sh .4s}
-@keyframes sh{20%{transform:translate(-8px,5px)}40%{transform:translate(7px,-6px)}60%{transform:translate(-5px,4px)}80%{transform:translate(4px,-3px)}}
-.ov{position:fixed;inset:0;background:#000c;z-index:20;display:flex;align-items:center;justify-content:center;padding:14px}
-.box{background:var(--pn2);border:2px solid var(--gold);border-radius:16px;padding:18px;max-width:520px;width:100%;text-align:center}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:#222;padding:10px 16px;border-radius:99px;font-weight:700;z-index:30}
-input{font:inherit;padding:8px;border-radius:8px;border:1px solid #2f6a50;background:#0f2219;color:var(--tx)}
-.prog{height:8px;background:#0006;border-radius:9px;overflow:hidden}.prog i{display:block;height:100%;background:var(--gold)}
-@media(max-width:560px){.card{width:44px;height:66px}.card .s{font-size:19px}.vs .big{font-size:60px}}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacha RPG | Lobby Principal</title>
+    <!-- Fuentes Gamer Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-body{background:radial-gradient(ellipse at top,#1f3f31,#07130e 70%) fixed}
-.logo{font:900 2.8rem Georgia,serif;text-align:center;letter-spacing:8px;margin:8px 0 0;background:linear-gradient(#fff6c4,#d9a528 60%,#8a6410);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #0008)}
-.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:560px;margin:0 auto}
-.tile{padding:16px;text-align:left;min-height:68px;border-radius:14px;background:linear-gradient(#1e4a37,#12301f);border:1px solid #3b8a67;box-shadow:0 4px 12px #0006}
-.tile.big{grid-column:1/-1;min-height:84px;font-size:1.1rem}.tile small{display:block;opacity:.75;font-weight:400}
-button.pri,.tile.pri{background:linear-gradient(#ffe28a,#e0a82a);color:#2a1d00;border:0;box-shadow:0 4px 12px #0006}
-.item{background:linear-gradient(#173a2b,#10281e);border:1px solid #2f6a5088;box-shadow:0 4px 12px #0005}
-.bar{background:linear-gradient(90deg,#10281e,#173a2b);border:1px solid #2f6a5066}
-.card:not(.back){box-shadow:0 3px 8px #0008,inset 0 0 0 3px #ffffff40;border-radius:8px}.card .s{text-shadow:0 1px 2px #0005}
-.back{box-shadow:0 3px 8px #0008,inset 0 0 0 3px #ffffff55}.back i{font-style:normal;margin:auto;font-size:22px;filter:drop-shadow(0 1px 2px #000a)}.back.mini i{display:none}
-.table{background:radial-gradient(ellipse at center,#2e8a60,#0f3a28 85%);box-shadow:inset 0 0 50px #0009,0 12px 30px #000a;border-color:#6b4423}
-.hand .card{zoom:var(--cs,1)}
-.tt{color:var(--gold);font-weight:400;font-size:11px}.L{text-align:left}
-.seg{display:flex;gap:4px}.seg button{padding:6px 10px}.seg button.on{background:var(--gold);color:#222;font-weight:700}
-.set{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #fff1}
-.ev{background:linear-gradient(90deg,#ff7a1a,#7a2fb5);padding:10px;border-radius:10px;margin:0 auto 10px;font-weight:700;text-align:center;max-width:560px}
-textarea{width:100%;font:12px monospace;padding:8px;border-radius:8px;border:1px solid #2f6a50;background:#0f2219;color:var(--tx);margin:6px 0}
-#chat{position:fixed;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:15}
-#cb{width:46px;height:46px;border-radius:50%;padding:0;font-size:20px;position:relative;background:#1e4a37;box-shadow:0 4px 12px #000a}
-#cn{position:absolute;top:-4px;right:-4px;background:#e53935;border-radius:99px;font-size:11px;padding:0 6px}
-#cp{display:none;position:absolute;bottom:54px;right:0;width:270px;background:#0b1d15f5;border:1px solid var(--gold);border-radius:12px;padding:8px}
-#cp.open{display:block}#cl{height:130px;overflow:auto;font-size:12px}
-.qp{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.qp button{padding:3px 7px;font-size:12px}.cf{display:flex;gap:4px}.cf input{flex:1;min-width:0}
-.logo{font-size:clamp(1.4rem,7vw,2.8rem);letter-spacing:3px}
-.tabs{display:flex;gap:6px;margin:8px 0}.tabs button{flex:1;padding:9px 4px}.tabs button.on{background:var(--gold);color:#222;font-weight:700}
-.mq{display:flex;gap:10px;align-items:center;background:linear-gradient(#173a2b,#10281e);border:1px solid #2f6a5088;border-radius:12px;padding:10px;margin-bottom:8px}.mq.dn{opacity:.55}
-.bdg{background:#e53935;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:6px}
-.tmr{font-weight:700;margin-left:6px}
-.card.gr::after,.card.pr::after{content:'';position:absolute;left:3px;right:3px;bottom:-8px;height:5px;border-radius:3px;background:var(--gc)}
-.card.pr::after{background:none;border-bottom:4px dotted var(--gc);height:0}
-.card.gr{box-shadow:0 3px 8px #0008,inset 0 0 0 3px var(--gc)!important}
-.glow{outline:3px solid #4cd964;box-shadow:0 0 14px #4cd964!important}
-.leg2{font-size:11px;color:#d7e5dc;text-align:center;margin-top:8px}
-</style><script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script></head><body><div id="app"></div>
-<script>
-const SU=['🪙','🏆','⚔️','🌿'],SN=['Oros','Copas','Espadas','Bastos'],VL=['','1','2','3','4','5','6','7','8','9','S','C','R'];
-const RANKS=[['Bronce','#cd7f32'],['Plata','#c0c0c0'],['Oro','#f2c94c'],['Platino','#7fe0d8'],['Diamante','#6cc3ff'],['Campeón','#c77dff'],['Real','#ff5c5c']];
-const RAR={C:['Común','#9aa7a0',10,60],R:['Rara','#4aa3ff',25,25],E:['Épica','#b266ff',50,11],L:['Legendaria','#ffb020',100,4],V:['Evento','#ff7a1a',80,0],X:['Exclusiva','#ff5c5c',0,0]};
-const mk=(id,n,r,bg,em,fbg,bd,jk,ink,sym,o={})=>({id,n,r,bg,em,o,f:{bg:fbg,bd,jk,ink,sym}});
-const DECKS=[
-mk('std','Estándar','C','repeating-linear-gradient(45deg,#a8322d 0 6px,#8c241f 6px 12px)','♦','#fbf7ea','#888','#7a2fb5',['#b8860b','#c0392b','#1f5fa8','#2e7d32'],SU),
-mk('azul','Azul Marino','C','repeating-linear-gradient(-45deg,#2c5fa8 0 6px,#1f4a8a 6px 12px)','⚓','linear-gradient(#f3f8ff,#cfe0f7)','#2c5fa8','#173766',['#8a6d00','#b3261e','#173766','#1b5e20'],SU),
-mk('rosa','Sakura','C','radial-gradient(circle,#ffb7d0 20%,#e0709a)','🌸','linear-gradient(#fff0f5,#ffd0e0)','#e0709a','#9b2a6a',['#a0701a','#c2185b','#5a3d9a','#2e7d32'],['🌼','🌹','🍃','🎋']),
-mk('noche','Medianoche','C','linear-gradient(135deg,#1b2a4a,#0a1226)','☾','linear-gradient(#e8ecf7,#b9c3dd)','#1b2a4a','#3a2a7a',['#8a6d00','#a52a2a','#1b2a6a','#1f5a2a'],SU),
-mk('blq','Bloques (Cúbica)','R','repeating-conic-gradient(#4a8f3a 0 25%,#6b4a2b 0 50%) 0 0/16px 16px','⛏️','linear-gradient(#dcc596,#b8935a)','#4a8f3a','#4a2b8a',['#7a5a00','#a52a2a','#1f4f8a','#2f6d1f'],['🟨','🟥','🟦','🟩']),
-mk('sel','Selva','R','linear-gradient(135deg,#2e7d32,#0d3d12)','🌴','linear-gradient(160deg,#eaf7dc,#b5d99c)','#2e7d32','#0d3d12',['#8a6d00','#b3261e','#1a4a8a','#0d3d12'],['🌕','🍓','💧','🌴']),
-mk('mar','Océano','R','linear-gradient(180deg,#2aa7d6,#0a4b73)','🐚','linear-gradient(#e4f8ff,#9fdcf0)','#0a6fa0','#0a3a5a',['#8a6d00','#c0392b','#0a4b73','#0d6b4a'],['🐚','🦀','🐟','🌊']),
-mk('lava','Volcán','R','linear-gradient(180deg,#ff6a1a,#6b1a00)','🌋','linear-gradient(#2a1410,#120706)','#ff6a1a','#ffd36b',['#ffd36b','#ff6a5a','#ffa14a','#ffcf70'],['🔶','🔥','⚔️','🌋']),
-mk('vac','Caballero Vacío','E','radial-gradient(circle,#2a2a4e 30%,#050510),#000','🗡️','linear-gradient(160deg,#1c1c34,#07070f)','#8fa8ff','#d6a8ff',['#ffd36b','#ff7b9c','#8fd0ff','#8ff0b0'],['🔆','🩸','🗡️','🍃']),
-mk('sol','Eclipse Épico','E','radial-gradient(circle at 30% 30%,#ffd36b,#6b2fa8 60%,#1a0b33)','🌘','radial-gradient(circle at 30% 20%,#40187a,#12051f)','#ffd36b','#ffd36b',['#ffd36b','#ff8fb0','#8fd6ff','#9dffb0'],['☀️','🔥','🌙','⭐']),
-mk('hielo','Glaciar','E','linear-gradient(135deg,#bfefff,#4aa3d9)','❄️','linear-gradient(135deg,#f2fcff,#bde8f7,#f2fcff)','#6cc3ff','#2a4a9a',['#7a6a1a','#b3365a','#1f4f9a','#1b6b5a'],['💠','❄️','🧊','🌨️']),
-mk('neon','Neón','E','linear-gradient(135deg,#ff2bd6,#2b1bff)','⚡','#0b0b1a','#ff2bd6','#00ffd5',['#ffe600','#ff4fa0','#00e5ff','#7dff6a'],['⬢','♥','◆','♣']),
-mk('oro','Oro Animado','L','linear-gradient(120deg,#f2c94c,#fff3b0,#c9961a,#f2c94c)','👑','linear-gradient(120deg,#fff3b0,#f2c94c,#fff9d6,#f2c94c,#fff3b0)','#c9961a','#5a1a8a',['#7a5a00','#9b1c1c','#1a3c7a','#14532d'],['👑','💎','🗡️','🌟'],{leg:1}),
-mk('cos','Cósmica','L','radial-gradient(circle at 30% 30%,#6b2fff,#0a0420)','✦','radial-gradient(circle at 50% 0,#3b1a8a,#07021a)','#b9a0ff','#ffffff',['#ffe17a','#ff8fd0','#8fe0ff','#9dffc0'],['☀️','🪐','🌙','☄️'],{leg:1}),
-mk('hal','Halloween 2026','V','radial-gradient(circle at 50% 40%,#ff8a1a,#2a0a00 70%)','🎃','linear-gradient(160deg,#2b1240,#0d0618)','#ff7a1a','#7dff6a',['#ff9a2a','#ff4a4a','#b57aff','#7dff6a'],['🎃','🕷️','🦇','💀']),
-mk('cam','Campeón','X','linear-gradient(135deg,#c77dff,#4a1a8a)','🏆','linear-gradient(135deg,#f6e8ff,#d9b3ff,#f6e8ff)','#c77dff','#4a1a8a',['#7a5a00','#a8205a','#2a2a8a','#1b5e20'],['🥇','👑','🗡️','🌟'],{leg:1}),
-mk('real','Corona Real','X','linear-gradient(135deg,#ff5c5c,#6b0f1a)','👑','linear-gradient(135deg,#fff6d6,#ffd9a0,#fff6d6)','#ff5c5c','#6b0f1a',['#7a5a00','#b3122a','#1a3c7a','#14532d'],['👑','💎','⚜️','🏵️'],{leg:1})];
-const MIS=[{k:'play',g:3,c:2,t:'Diaria: juega 3 partidas'},{k:'win',g:1,c:3,t:'Diaria: gana 1 partida'},{k:'win',g:10,c:15,t:'Semanal: gana 10 partidas'},{k:'joker',g:1,c:5,t:'Logro: cierra usando un comodín'},{k:'win',g:50,c:25,t:'Logro: 50 victorias'}];
-const AV=['🦊','🐻','🦁','🐼','🐸','🦉','🐙','🐲'];
-const DEF=()=>({name:'Jugador',av:0,coins:20,wins:0,games:0,pts:0,owned:['std','azul'],deck:'std',m:{play:0,win:0,joker:0},done:[],season:null,best:-1,hist:{},titles:[],title:'',streak:0,bs:0,set:{speed:1,vs:1,auto:0,size:1,conf:1,snd:1,hint:1},mq:{},tut:0});
-let S=DEF();
-try{const x=JSON.parse(localStorage.getItem('remigio'));if(x)S=Object.assign(S,x)}catch(e){}
-S.set=Object.assign(DEF().set,S.set);
-const save=()=>{try{localStorage.setItem('remigio',JSON.stringify(S))}catch(e){}};
-const $=s=>document.querySelector(s),app=$('#app'),rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-const dk=id=>DECKS.find(d=>d.id===id);
-const rank=()=>RANKS[Math.min(6,Math.floor(S.pts/100))];
-function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
-const bar=(back)=>`<div class="bar"><b>${AV[S.av]} ${S.name}${S.title?` <small class="tt">«${tn(S.title)}»</small>`:''}</b><span>🪙 ${S.coins}</span><span style="color:${rank()[1]}">◆ ${rank()[0]} · ${S.pts%100}/100</span>${back?'<button onclick="menu()">← Menú</button>':''}</div>`;
-const curSeason=()=>{const d=new Date();return Math.max(0,(d.getFullYear()-2026)*12+d.getMonth()-9)};
-const daysLeft=()=>{const d=new Date();return Math.ceil((new Date(d.getFullYear(),d.getMonth()+1,1)-d)/864e5)};
-const halOn=()=>Date.now()<new Date(2026,9,31,23,59,59).getTime();
-function rollSeason(){const c=curSeason();if(S.season==null){S.season=c;return}
- if(S.season<c){const b=Math.min(6,Math.floor(S.pts/100));S.hist[S.season]=b;S.coins+=10*(b+1);S.pts=Math.max(0,b-2)*100;S.season=c;S.best=-1;save();setTimeout(()=>toast('Nueva temporada '+c+': división reiniciada · premio +'+10*(b+1)+' 🪙'),400)}}
-const TT=[{id:'w1',n:'Principiante',d:'Gana 1 partida',ok:()=>S.wins>=1},{id:'w10',n:'Aprendiz',d:'Gana 10 partidas',ok:()=>S.wins>=10},{id:'w100',n:'Veterano',d:'Gana 100 partidas',ok:()=>S.wins>=100},{id:'w500',n:'Maestro de Mesa',d:'Gana 500 partidas',ok:()=>S.wins>=500},{id:'w1000',n:'Leyenda del Remigio',d:'Gana 1000 partidas',ok:()=>S.wins>=1000},
-{id:'g50',n:'Jugón',d:'Juega 50 partidas',ok:()=>S.games>=50},{id:'jk',n:'Comodinero',d:'Cierra con comodín 10 veces',ok:()=>S.m.joker>=10},{id:'st5',n:'Imparable',d:'Racha de 5 victorias',ok:()=>S.bs>=5},
-{id:'c5',n:'Coleccionista',d:'Consigue 5 barajas',ok:()=>S.owned.length>=5},{id:'c10',n:'Gran Coleccionista',d:'Consigue 10 barajas',ok:()=>S.owned.length>=10},{id:'hal',n:'Cazador de Calabazas',d:'Consigue la baraja de Halloween',ok:()=>S.owned.includes('hal')},{id:'real',n:'Soberano',d:'Consigue la Corona Real',ok:()=>S.owned.includes('real')}];
-function tn(id){const t=TT.find(x=>x.id==id);if(t)return t.n;const q=id.match(/^ms(\d+)$/);if(q)return 'Misionero · T'+q[1];const m=id.match(/^r(\d+)_(\d)$/);return m?RANKS[+m[2]][0]+' · T'+m[1]:id}
-function addT(id){if(!S.titles.includes(id)){S.titles.push(id);toast('Nuevo título: '+tn(id))}}
-const chk=()=>TT.forEach(t=>{if(t.ok())addT(t.id)});
-function awardRanks(){const i=Math.min(6,Math.floor(S.pts/100));for(let k=S.best+1;k<=i;k++){addT('r'+S.season+'_'+k);if(k==5&&!S.owned.includes('cam')){S.owned.push('cam');toast('¡Baraja Campeón desbloqueada!')}if(k==6&&!S.owned.includes('real')){S.owned.push('real');toast('¡Baraja Corona Real desbloqueada!')}}S.best=Math.max(S.best,i)}
-function titles(){app.innerHTML=bar(1)+`<h2>Títulos</h2><div class="sub">Se muestran junto a tu nombre en las partidas</div><div class="row"><button onclick="S.title='';save();titles()">Sin título</button></div><div class="grid">${S.titles.map(id=>`<div class="item"><b>${tn(id)}</b><br><button ${S.title==id?'disabled':''} onclick="S.title='${id}';save();titles()" style="margin-top:6px">${S.title==id?'Equipado':'Equipar'}</button></div>`).join('')}${TT.filter(t=>!S.titles.includes(t.id)).map(t=>`<div class="item" style="opacity:.55"><b>🔒 ${t.n}</b><br><small>${t.d}</small></div>`).join('')}</div><p class="sub">Cada vez que subes de rango en la Clasificatoria ganas el título de ese rango y esa temporada.</p>`}
-const ask=(m,f)=>{window._ask=f;const o=document.createElement('div');o.className='ov';o.innerHTML=`<div class="box"><p>${m}</p><div class="row"><button class="pri" onclick="const f=_ask;this.closest('.ov').remove();f()">Aceptar</button><button onclick="this.closest('.ov').remove()">Cancelar</button></div></div>`;document.body.appendChild(o)};
-const ap=()=>document.documentElement.style.setProperty('--cs',S.set.size);
-const seg=(k,o)=>`<div class="seg">${o.map(([l,v])=>`<button class="${S.set[k]==v?'on':''}" onclick="S.set.${k}=${v};save();ap();settings()">${l}</button>`).join('')}</div>`;
-const enc=()=>btoa(unescape(encodeURIComponent(JSON.stringify(S))));
-function cp(){const e=$('#sv');e.select();const ok=()=>toast('Código copiado');try{navigator.clipboard.writeText(e.value).then(ok,()=>{document.execCommand('copy');ok()})}catch(x){document.execCommand('copy');ok()}}
-function imp(){try{const o=JSON.parse(decodeURIComponent(escape(atob($('#im').value.trim()))));if(typeof o!='object'||!Array.isArray(o.owned)||o.coins===undefined)throw 0;ask('Esto reemplazará tu progreso actual. ¿Continuar?',()=>{S=Object.assign(DEF(),o);S.set=Object.assign(DEF().set,o.set);rollSeason();save();ap();toast('Partida importada');settings()})}catch(e){toast('Código no válido')}}
-function settings(){app.innerHTML=bar(1)+`<h2>Ajustes</h2><div class="item L"><div class="set"><span>Velocidad de los bots</span>${seg('speed',[['Lenta',1.6],['Normal',1],['Rápida',.5]])}</div>
-<div class="set"><span>Intro "VS" al empezar</span>${seg('vs',[['Sí',1],['No',0]])}</div><div class="set"><span>Ordenar mano al robar</span>${seg('auto',[['Sí',1],['No',0]])}</div>
-<div class="set"><span>Tamaño de cartas</span>${seg('size',[['Pequeño',.85],['Normal',1],['Grande',1.2]])}</div><div class="set"><span>Sonido</span>${seg('snd',[['Sí',1],['No',0]])}</div><div class="set"><span>Ayudas visuales (grupos y parejas)</span>${seg('hint',[['Sí',1],['No',0]])}</div><div class="set"><span>Confirmar al abandonar</span>${seg('conf',[['Sí',1],['No',0]])}</div></div>
-<div class="item L" style="margin-top:10px"><h2>💾 Guardado</h2><b>Exportar</b><small> — copia este código y guárdalo donde quieras</small><textarea id="sv" rows="3" readonly>${enc()}</textarea><button class="pri" onclick="cp()">Copiar código</button>
-<p><b>Importar</b><small> — pega aquí un código exportado</small></p><textarea id="im" rows="3" placeholder="Pega tu código…"></textarea><div class="row" style="justify-content:flex-start"><button onclick="imp()">Importar partida</button><button onclick="ask('Se borrará TODO tu progreso. ¿Seguro?',()=>{S=DEF();rollSeason();save();ap();settings()})">Borrar progreso</button></div></div>`}
-function abn(){S.set.conf?ask('¿Abandonar? Cuenta como derrota',quit):quit()}
-let ON=null,CH=[],unread=0;
-const sn=(x,n=14)=>String(x??'').replace(/[<>&"'`]/g,'').slice(0,n);
-const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const QP=['¡Buena jugada!','¡Cuidado!','Gracias','¡Qué suerte!','😂','👏','😱','GG'],BP=['😂','¡Vaya!','Casi...','Jajaja','¡Buena!','Mmm...','👏','¡Rápido!'];
-const me=()=>({name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins});
-const bc=o=>ON&&ON.role=='h'&&ON.conns.forEach(c=>c&&c.open&&c.send(o));
-function chatUI(){if($('#chat'))return;const d=document.createElement('div');d.id='chat';d.innerHTML=`<button id="cb" onclick="$('#cp').classList.toggle('open');unread=0;chatR()">💬<b id="cn"></b></button><div id="cp"><div id="cl"></div><div class="qp">${QP.map(q=>`<button onclick="say('${q}')">${q}</button>`).join('')}</div><div class="cf"><input id="ci" maxlength="80" placeholder="Escribe…" onkeydown="if(event.key=='Enter')sayI()"><button onclick="sayI()">➤</button></div></div>`;document.body.appendChild(d);chatR()}
-function chatR(){const l=$('#cl');if(!l)return;l.innerHTML=CH.slice(-30).map(x=>`<div><b style="color:var(--gold)">${esc(x.n)}:</b> ${esc(x.m)}</div>`).join('');l.scrollTop=1e9;$('#cn').textContent=unread||''}
-function chatAdd(n,m){CH.push({n,m});if(!$('#cp')||!$('#cp').classList.contains('open')){if(n!=S.name){unread++;snd('msg');toast(n+': '+m)}}chatR()}
-const RL={n:0,until:0,last:0};
-function rlOK(o){const t=Date.now();o.n=o.n||0;o.until=o.until||0;if(t<o.until)return false;if(t-(o.last||0)>20000)o.n=0;o.last=t;o.n++;if(o.n>=5){o.until=t+15000;o.n=0;if(o===RL)cdUI()}return true}
-function cdUI(){const tk=()=>{const e=$('#ci');if(!e)return;const r=Math.ceil((RL.until-Date.now())/1000);document.querySelectorAll('#cp button').forEach(b=>b.disabled=r>0);e.disabled=r>0;e.placeholder=r>0?'Espera '+r+' s…':'Escribe…';if(r>0)setTimeout(tk,500)};tk()}
-function say(m){m=sn(m,80).trim();if(!m)return false;if(!rlOK(RL)){toast('Espera '+Math.ceil((RL.until-Date.now())/1000)+' s para volver a escribir');return false}
- if(ON){if(ON.role=='h'){chatAdd(S.name,m);bc({t:'chat',n:S.name,m})}else if(ON.conn&&ON.conn.open)ON.conn.send({t:'chat',m})}else{chatAdd(S.name,m);if(G&&!G.over&&Math.random()<.5){const b=G.pl[rnd(1,3)];setTimeout(()=>chatAdd(b.name,BP[rnd(0,7)]),rnd(900,2200))}}return true}
-const sayI=()=>{const e=$('#ci');if(say(e.value))e.value=''};
-function botSay(p,m){m=m||BP[rnd(0,7)];chatAdd(p.name,m);bc({t:'chat',n:p.name,m})}
-/* ---- Online (PeerJS, anfitrión autoritativo) ---- */
-function leaveOn(){if(ON){clearTimeout(ON.mt);try{ON.peer.destroy()}catch(e){}ON=null}}
-function okP(){if(typeof Peer=='undefined'){toast('Online no disponible aquí: sube el juego a tu hosting (Vercel)');return false}return true}
-function fail(){toast('No se pudo conectar. Online funciona al alojar el juego fuera de Claude');leaveOn();onl()}
-function onl(){leaveOn();app.innerHTML=bar(1)+`<h2>🌐 Jugar online</h2><div class="item L"><p>Juega con amigos con un código de sala (conexión directa entre navegadores). Los asientos libres los ocupan bots. Si el anfitrión sale, la sala se cierra.</p><div class="row" style="justify-content:flex-start"><button class="pri" onclick="host()">Crear sala</button></div><p>O únete con un código:</p><div class="row" style="justify-content:flex-start"><input id="rc" maxlength="5" placeholder="CÓDIGO" style="text-transform:uppercase;width:130px"><button onclick="joinR()">Unirse</button></div></div>`}
-function host(cid,mm){if(!okP())return;const code=cid||Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(0,31)]).join('');
- const pe=new Peer('remigio-'+code);ON={role:'h',peer:pe,code,conns:[null,null,null,null],info:[me(),null,null,null],started:0,mm:mm||0,mode:mm||''};CH=[];G=null;chatUI();
- const t=setTimeout(()=>{if(ON&&ON.peer===pe&&!ON.open){if(mm)mmFail(mm);else fail()}},8000);
- pe.on('open',()=>{clearTimeout(t);ON.open=1;lobbyBcast();if(mm)ON.mt=setTimeout(()=>{if(ON&&!ON.started)startOnline()},12000)});
- pe.on('error',e=>{if(ON&&ON.peer===pe&&!ON.open){clearTimeout(t);if(mm){leaveOn();return e.type=='unavailable-id'?mmGo(mm):mmFail(mm)}fail()}});
- pe.on('connection',c=>{const k=[1,2,3].find(i=>!ON.conns[i]);if(!k||ON.started){c.on('open',()=>{c.send({t:'full'});setTimeout(()=>c.close(),400)});return}
-  ON.conns[k]=c;c.on('data',m=>hMsg(k,m));c.on('close',()=>hLeft(k))})}
-const MMK=8;
-function mmFail(mode){leaveOn();toast('Sin conexión online: jugarás contra bots');start(mode)}
-function mmGo(mode,slot=1){leaveOn();const pre=mode=='rank'?'MR':'MQ',code=n=>pre+String(n).padStart(3,'0');let pe;try{pe=new Peer()}catch(e){return mmFail(mode)}
- ON={role:'c',peer:pe,mm:mode};CH=[];G=null;chatUI();
- app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:380px;margin:auto"><div style="font-size:2.5rem">🔎</div><p>Buscando jugadores reales… si no hay, te acompañarán bots.</p><button onclick="menu()">Cancelar</button></div>`;
- let cur=null;const dead=()=>!ON||ON.peer!==pe;
- const t0=setTimeout(()=>{if(!dead()&&!pe.open)mmFail(mode)},8000);
- pe.on('error',e=>{if(dead())return;if(e.type=='peer-unavailable'){cur&&cur('none')}else if(!ON.open)mmFail(mode)});
- pe.on('open',()=>{clearTimeout(t0);try1()});
- function try1(){if(dead())return;if(slot>MMK){slot=1;return setTimeout(try1,2500)}
-  const c=pe.connect('remigio-'+code(slot),{reliable:true});let d=0;
-  const fin=r=>{if(d||dead())return;d=1;clearTimeout(to);cur=null;
-   if(r=='open'){c.on('data',m=>{if(dead())return;if(m&&m.t=='full'){try{c.close()}catch(e){}slot++;ON.conn=null;try1()}else cMsg(m)});
-    c.on('close',()=>{if(ON&&ON.peer===pe&&ON.conn===c&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}});
-    ON.conn=c;ON.open=1;ON.code=code(slot);c.send({t:'join',p:me()})}
-   else{try{c.close()}catch(e){}claim()}};
-  const to=setTimeout(()=>fin('none'),4000);cur=fin;c.on('open',()=>fin('open'))}
- function claim(){if(dead())return;const s=slot;leaveOn();host(code(s),mode)}}
-function lobbyR(code,names,h){const pub=/^M[RQ]\d{3}$/.test(code);app.innerHTML=bar(1)+`<h2>${pub?'Buscando jugadores…':'Sala '+code}</h2><div class="item L"><p>${pub?'La partida empezará en unos segundos. Los asientos libres serán bots.':'Comparte este código. Los asientos libres serán bots.'}</p>${names.map((n,i)=>`<div class="set"><span>Asiento ${i+1}: ${n?sn(n):'<i>libre (bot)</i>'}</span></div>`).join('')}</div>${pub?'':h?'<div class="row"><button class="pri" onclick="startOnline()">▶ Empezar partida</button></div>':'<div class="sub">Esperando a que el anfitrión empiece…</div>'}`}
-function lobbyBcast(){const names=ON.info.map((x,k)=>x&&(k==0||ON.conns[k])?x.name:'');lobbyR(ON.code,names,1);bc({t:'lobby',code:ON.code,names})}
-function hMsg(k,m){if(!m||typeof m!='object')return;
- if(m.t=='join'&&!ON.started){const p=m.p||{};ON.info[k]={name:sn(p.name)||'Jugador',title:sn(p.title),av:AV.includes(p.av)?p.av:'🦊',deck:dk(p.deck)?p.deck:'std',wins:+p.wins||0};lobbyBcast();if(ON.mm&&ON.info.filter((x,j)=>x&&(j==0||ON.conns[j])).length>=4){clearTimeout(ON.mt);setTimeout(()=>{if(ON&&!ON.started)startOnline()},1500)}}
- else if(m.t=='chat'){if(!rlOK((ON.rl=ON.rl||[{},{},{},{}])[k]))return;const mm=sn(m.m,80);const n=ON.info[k]?ON.info[k].name:'Jugador';if(mm){chatAdd(n,mm);bc({t:'chat',n,m:mm})}}
- else if(G&&!G.over)hAct(k,m)}
-function hAct(pi,m){if(G.turn!=pi)return;const p=G.pl[pi];
- if(m.t=='draw'&&G.ph=='draw'){take(p,m.src=='p'?'p':'d');G.ph='disc';table()}
- else if(m.t=='disc'&&G.ph=='disc'){const i=p.hand.findIndex(c=>c.id==m.id);if(i>=0)discard(pi,i)}}
-function hLeft(k){if(!ON)return;ON.conns[k]=null;if(!G||G.over||!ON.started){ON.info[k]=null;if(!ON.started)lobbyBcast();return}
- const p=G.pl[k];p.remote=0;p.bot=1;p.lvl=2;p.name+=' (bot)';chatAdd(p.name,'se ha desconectado');table();if(G.turn==k){if(G.ph=='disc')setTimeout(()=>discard(k,bestDisc(p.hand,2).i),900);else next()}}
-function startOnline(){clearTimeout(ON.mt);ON.started=1;ON.sendIntro=1;start(ON.mode||'online')}
-function view(k){const R=a=>a.map((_,j)=>a[(k+j)%4]);return {mode:G.mode,turn:(G.turn-k+4)%4,ph:G.ph,over:G.over,dc:G.draw.length,top:G.disc[G.disc.length-1]||null,tc:R(G.tc),rem:Math.max(0,(G.dl||0)-Date.now()),pl:R(G.pl).map((p,j)=>({name:p.name,title:p.title,av:p.av,deck:p.deck,wins:p.wins,hand:j==0?p.hand:p.hand.map(()=>({s:9,v:0}))}))}}
-function bcast(){if(!ON||!ON.conns||!G)return;ON.conns.forEach((c,k)=>{if(c&&c.open){const m={t:'state',v:view(k)};if(ON.sendIntro)m.intro=1;c.send(m)}});ON.sendIntro=0}
-function joinR(){if(!okP())return;const code=($('#rc').value||'').trim().toUpperCase();if(code.length!=5)return toast('El código tiene 5 caracteres');
- const pe=new Peer();ON={role:'c',peer:pe,code};CH=[];G=null;chatUI();app.innerHTML=bar(1)+'<div class="sub">Conectando…</div>';
- const t=setTimeout(()=>{if(ON&&!ON.open)fail()},8000);
- pe.on('open',()=>{const c=pe.connect('remigio-'+code,{reliable:true});ON.conn=c;c.on('open',()=>{clearTimeout(t);ON.open=1;c.send({t:'join',p:me()})});c.on('data',cMsg);c.on('close',()=>{if(ON&&!(G&&G.over)){toast('Se perdió la conexión con la sala');leaveOn();menu()}})});
- pe.on('error',()=>{if(ON&&!ON.open){clearTimeout(t);fail()}})}
-function cMsg(m){if(!m||typeof m!='object')return;
- if(m.t=='lobby')lobbyR(sn(m.code,5),(m.names||[]).map(n=>sn(n)),0);
- else if(m.t=='chat'){const mm=sn(m.m,80);if(mm)chatAdd(sn(m.n)||'?',mm)}
- else if(m.t=='full'){toast('La sala está llena o ya empezó');leaveOn();menu()}
- else if(m.t=='state')cState(m);
- else if(m.t=='end'&&G){G.over=true;if(m.w>=0&&G.pl[m.w]){G.pl[m.w].hand=(m.hand||[]).slice(0,10)}finish(m.w)}}
-function cState(m){const v=m.v;if(!v||!Array.isArray(v.pl)||v.pl.length!=4)return;const old=G&&G.pl?G.pl[0].hand:null,sid=old&&G.sel!=null&&old[G.sel]?old[G.sel].id:null;
- v.pl.forEach(p=>{p.name=sn(p.name);p.title=sn(p.title);p.av=sn(p.av,4);p.deck=dk(p.deck)?p.deck:'std'});
- if(old){const ix=new Map(old.map((c,i)=>[c.id,i]));v.pl[0].hand.sort((a,b)=>(ix.has(a.id)?ix.get(a.id):99)-(ix.has(b.id)?ix.get(b.id):99))}
- v.draw=new Array(v.dc|0).fill(0);v.disc=v.top?[v.top]:[];v.sel=sid==null?null:v.pl[0].hand.findIndex(c=>c.id==sid);if(v.sel<0)v.sel=null;
- v.dl=v.rem>0?Date.now()+v.rem:0;if(G&&G.pl){const a=G.disc[G.disc.length-1],b=v.top;if(b&&(!a||a.id!==b.id))snd('disc');else if(G.draw.length!==v.dc)snd('draw');if(v.turn==0&&G.turn!=0)snd('turn')}
- G=v;if(m.intro)vs();else table()}
-const MQ={d:[['Juega 3 partidas','play',3,2],['Gana 1 partida','win',1,3],['Cierra con un comodín','joker',1,4],['Juega 1 partida clasificatoria','ranked',1,3]],
-w:[['Gana 10 partidas','win',10,15],['Juega 25 partidas','play',25,12],['Cierra con comodín 3 veces','joker',3,10],['Gana 3 clasificatorias','rwin',3,20],['Juega 3 partidas online','online',3,15]],
-s:[['Gana 60 partidas','win',60,50],['Juega 100 partidas','play',100,40],['Gana 20 clasificatorias','rwin',20,80],['Cierra con comodín 20 veces','joker',20,50],['Juega 25 partidas online','online',25,60]]};
-const wkey=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()-(d.getDay()+6)%7).toLocaleDateString('sv')};
-function mqRoll(){S.mq=S.mq||{};const k={d:new Date().toLocaleDateString('sv'),w:wkey(),s:String(S.season)};for(const sc of ['d','w','s'])if(!S.mq[sc]||S.mq[sc].key!==k[sc])S.mq[sc]={key:k[sc],p:{},c:[]}}
-function mev(k,n=1){mqRoll();for(const sc of ['d','w','s'])S.mq[sc].p[k]=(S.mq[sc].p[k]||0)+n}
-const claimable=()=>['d','w','s'].reduce((a,sc)=>a+MQ[sc].filter((m,i)=>(S.mq[sc].p[m[1]]||0)>=m[2]&&!S.mq[sc].c.includes(i)).length,0);
-function tl(sc){const n=new Date();if(sc=='d')return 'Se reinicia en '+Math.ceil((new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n)/36e5)+' h';if(sc=='w'){const d=7-(n.getDay()+6)%7;return 'Se reinicia en '+d+' día'+(d>1?'s':'')}return 'La temporada termina en '+daysLeft()+' días'}
-let MT='d';
-function missions(t){if(typeof t=='string')MT=t;mqRoll();const o=S.mq[MT],L=MQ[MT],nm={d:'Diarias',w:'Semanales',s:'Temporada '+S.season},done=o.c.length,any=L.some((m,i)=>(o.p[m[1]]||0)>=m[2]&&!o.c.includes(i));
- app.innerHTML=bar(1)+`<h2>📋 Misiones</h2><div class="tabs">${['d','w','s'].map(x=>`<button class="${MT==x?'on':''}" onclick="missions('${x}')">${nm[x]}</button>`).join('')}</div><div class="sub">${tl(MT)} · ${done}/${L.length} reclamadas</div>
- ${L.map((m,i)=>{const p=Math.min(o.p[m[1]]||0,m[2]),ok=p>=m[2],c=o.c.includes(i);return `<div class="mq${c?' dn':''}"><div style="flex:1"><b>${m[0]}</b><div class="prog" style="margin:6px 0"><i style="width:${p/m[2]*100}%"></i></div><small>${p}/${m[2]}</small></div><button class="${ok&&!c?'pri':''}" ${ok&&!c?'':'disabled'} onclick="claim('${MT}',${i})">${c?'✔ Reclamada':'+'+m[3]+' 🪙'}</button></div>`}).join('')}
- <div class="row"><button class="pri" ${any?'':'disabled'} onclick="claimAll()">Reclamar todo</button></div>${MT=='s'?'<p class="sub">Reclama las 5 misiones de temporada para conseguir el título «Misionero».</p>':''}`}
-function claim(sc,i,q){const o=S.mq[sc],m=MQ[sc][i];if(!m||o.c.includes(i)||(o.p[m[1]]||0)<m[2])return;o.c.push(i);S.coins+=m[3];if(sc=='s'&&o.c.length==MQ.s.length)addT('ms'+S.season);save();if(!q){toast('+'+m[3]+' 🪙');missions()}}
-function claimAll(){let t=0;MQ[MT].forEach((m,i)=>{const o=S.mq[MT];if(!o.c.includes(i)&&(o.p[m[1]]||0)>=m[2]){t+=m[3];claim(MT,i,1)}});toast('+'+t+' 🪙');missions()}
-let AC=null,lastTk=0;
-function tone(f,d,t='sine',v=.15,dl=0,sl){const c=AC,o=c.createOscillator(),g=c.createGain(),n=c.currentTime+dl;o.type=t;o.frequency.setValueAtTime(f,n);if(sl)o.frequency.exponentialRampToValueAtTime(sl,n+d);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(c.destination);o.start(n);o.stop(n+d+.02)}
-function snd(k){if(!S.set.snd)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state=='suspended')AC.resume();
- const T={draw:()=>tone(500,.08,'triangle',.12,0,800),disc:()=>tone(180,.12,'square',.07,0,90),turn:()=>{tone(660,.12,'sine',.14);tone(880,.18,'sine',.14,.12)},win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.25,'triangle',.16,i*.12)),lose:()=>[400,330,260].forEach((f,i)=>tone(f,.3,'sawtooth',.07,i*.18)),tick:()=>tone(1000,.05,'square',.05),msg:()=>tone(900,.07,'sine',.07),click:()=>tone(700,.04,'triangle',.06),pick:()=>tone(600,.05,'triangle',.07)};T[k]&&T[k]()}catch(e){}}
-document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('button'))snd('click')});
-function armTimer(){if(!G||G.over||(ON&&ON.role=='c'))return;clearTimeout(G.tt);const pi=G.turn,p=G.pl[pi];if(p.bot){G.dl=0;return}G.dl=Date.now()+60000;G.tt=setTimeout(()=>autoPlay(pi),60000)}
-function autoPlay(pi){if(!G||G.over||G.turn!=pi)return;const p=G.pl[pi];if(pi==0)toast('⏱ Tiempo agotado: jugada automática');else{chatAdd(p.name,'⏱ tiempo agotado');bc({t:'chat',n:p.name,m:'⏱ tiempo agotado'})}
- if(G.ph=='draw'){take(p,'d');G.ph='disc'}discard(pi,bestDisc(p.hand,2).i)}
-setInterval(()=>{const e=$('#tm');if(!e)return;if(!G||G.over||!G.dl){e.textContent='';return}const r=Math.max(0,Math.ceil((G.dl-Date.now())/1000));e.textContent='⏱ '+r+' s';e.style.color=r<=10?'#ff6b6b':'';if(G.turn==0&&r<=5&&r>0&&r!=lastTk){lastTk=r;snd('tick')}},500);
-/* ayudas visuales */
-function part(h){const n=h.length,by=Array.from({length:n},()=>[]);for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];for(let i=0;i<n;i++)if(m>>i&1)g.push(h[i]);if(okGroup(g))by[31-Math.clz32(m&-m)].push(m)}
- const memo={},f=m=>{if(!m)return [0,[]];if(memo[m])return memo[m];const lo=31-Math.clz32(m&-m);let b=f(m&(m-1));for(const g of by[lo])if((g&m)===g){const r=f(m&~g),v=cnt(g)+r[0];if(v>b[0])b=[v,[g].concat(r[1])]}return memo[m]=b};return f((1<<n)-1)[1]}
-const GC=['#4cd964','#4aa3ff','#ffb020','#ff6fb5','#b266ff'],PC2=['#ffd54a','#ff8a65','#4dd0e1','#ba68c8'];let MC={k:'',v:{}};
-function marks(h){const k=h.map(c=>c.id).sort().join();if(MC.k==k)return MC.v;const v={},used=new Set();
- part(h).forEach((m,gi)=>h.forEach((c,i)=>{if(m>>i&1){v[c.id]={cl:'gr',col:GC[gi%5]};used.add(i)}}));
- const rest=h.map((c,i)=>i).filter(i=>!used.has(i)&&h[i].s>=0),pu=new Set();let pi=0;
- for(let a=0;a<rest.length;a++)for(let b=a+1;b<rest.length;b++){const x=h[rest[a]],y=h[rest[b]];if(pu.has(x.id)||pu.has(y.id))continue;if((x.v==y.v&&x.s!=y.s)||(x.s==y.s&&x.v!=y.v&&Math.abs(x.v-y.v)<=2)){const col=PC2[pi++%4];v[x.id]={cl:'pr',col};v[y.id]={cl:'pr',col};pu.add(x.id);pu.add(y.id)}}
- MC={k,v};return v}
-/* tutorial */
-const TS=[['¡Bienvenido a Superremigio!','Gana quien primero ordene sus <b>10 cartas</b> en grupos de 3 o más. Hay 4 palos (🪙 🏆 ⚔️ 🌿), valores 1 al 9, S (Sota), C (Caballo) y R (Rey), y 4 comodines.',[[0,1],[1,8],[2,9],[3,12],[-1,0]]],
-['Tu turno','En cada turno <b>robas 1 carta</b> (del mazo boca abajo o la última del pozo) y después <b>descartas 1</b>. Tocas la carta para elegirla y pulsas «Descartar».',['B',[0,5]]],
-['Tríos y cuartetos','Mismo número y <b>palos distintos</b>. Valen 3 o 4 cartas.',[[0,7],[1,7],[2,7]]],
-['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, 8, 9, S, C, R; el 1 es el más bajo.',[[1,3],[1,4],[1,5],[1,6]]],
-['El comodín','Un 🃏 sustituye a cualquier carta. Puedes poner <b>hasta dos por grupo</b>: con dos comodines basta <b>una sola carta real</b> para hacer un trío o una escalera.',[[0,4],[-1,0],[0,6],[2,9],[-1,0],[-1,0]]],
-['Cómo se gana','Cuando tras descartar tus 10 cartas queden todas en grupos (por ejemplo 3+3+4), <b>cierras y ganas</b>. Ojo: <b>no se puede cerrar en la primera ronda</b>.',[[0,7],[1,7],[2,7],[3,2],[3,3],[3,4]]],
-['Ayudas y tiempo','Subrayado <b>sólido de color</b> = grupo ya formado. Subrayado <b>punteado</b> = pareja que busca una carta. Si la carta del pozo te sirve, brilla en verde. Tienes <b>60 segundos por turno</b>. Reordena tus cartas arrastrando o con ◀ ▶, y usa 💬 para el chat. Puedes desactivar las ayudas y el sonido en Ajustes.',[[2,5],[2,6]]]];
-function tut(i=0){const T=TS[i];let o=$('#tut');if(!o){o=document.createElement('div');o.id='tut';o.className='ov';document.body.appendChild(o)}
- o.innerHTML=`<div class="box"><div class="sub">Tutorial ${i+1}/${TS.length}</div><h2>${T[0]}</h2><div class="row" style="margin:10px 0">${T[2].map(c=>c=='B'?back(S.deck):cardH({s:c[0],v:c[1]},'',S.deck)).join('')}</div><p style="text-align:left">${T[1]}</p><div class="row">${i?`<button onclick="tut(${i-1})">←</button>`:''}${i<TS.length-1?`<button class="pri" onclick="tut(${i+1})">Siguiente</button>`:'<button class="pri" onclick="tutEnd()">¡A jugar!</button>'}<button onclick="tutEnd()">Saltar</button></div></div>`}
-function tutEnd(){const o=$('#tut');o&&o.remove();S.tut=1;save()}
-function menu(){leaveOn();$('#chat')&&$('#chat').remove();rollSeason();mqRoll();const cl=claimable();app.innerHTML=`<div class="logo">SUPERREMIGIO</div><div class="sub">Baraja española · 48 cartas + 4 comodines</div>${bar()}${halOn()?`<div class="ev" onclick="shop()" style="cursor:pointer">🎃 Evento de Halloween: baraja exclusiva en la tienda hasta el 31 de octubre</div>`:''}
-<div class="tiles"><button class="tile big pri" onclick="search('quick')"><b>⚡ Partida Rápida</b><small>4 jugadores · sin rango</small></button><button class="tile big" onclick="search('rank')"><b>🏅 Clasificatoria</b><small>Temporada ${S.season} · quedan ${daysLeft()} días</small></button>
-<button class="tile big" onclick="missions()"><b>📋 Misiones</b><small>${cl?cl+' por reclamar':'Diarias · Semanales · Temporada'}</small></button><button class="tile big" onclick="onl()"><b>🌐 Jugar online</b><small>Crea una sala y pasa el código a tus amigos</small></button><button class="tile" onclick="shop()"><b>🛒 Tienda</b></button><button class="tile" onclick="decks()"><b>🎴 Mazos</b></button><button class="tile" onclick="titles()"><b>🎖️ Títulos</b></button><button class="tile" onclick="profile()"><b>👤 Perfil</b></button><button class="tile" onclick="settings()"><b>⚙️ Ajustes</b></button><button class="tile" onclick="tut(0)"><b>🎓 Tutorial</b></button></div>`}
-function rules(){app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Reglas</h2><p>Cada jugador recibe <b>10 cartas</b>. En tu turno <b>robas 1</b> (mazo o pozo) y <b>descartas 1</b>.</p><p><b>Cierras</b> cuando, al descartar, las 10 cartas restantes están en grupos de mínimo 3 (ej. 3-3-4):</p><ul><li><b>Trío/Cuarteto:</b> mismo número, palos distintos.</li><li><b>Escalera:</b> 3+ cartas consecutivas del mismo palo (1-7, Sota, Caballo, Rey). El 1 es el más bajo.</li><li><b>Comodín 🃏:</b> sustituye cualquier carta; máximo 1 por grupo.</li></ul><p>S = Sota, C = Caballo, R = Rey. Gana la primera persona que cierre. Victoria: +2 monedas.</p></div>`}
-function profile(){const r=rank();app.innerHTML=bar(1)+`<div class="item" style="text-align:left"><h2>Perfil</h2><div class="row" style="justify-content:flex-start"><button onclick="S.av=(S.av+1)%AV.length;save();profile()" style="font-size:2rem">${AV[S.av]}</button><input value="${S.name}" maxlength="14" onchange="S.name=this.value||'Jugador';save();profile()"></div>
-<p>Partidas: ${S.games} · Victorias: ${S.wins} · Mejor racha: ${S.bs}</p><p>Temporada ${S.season} (quedan ${daysLeft()} días)</p><p style="font-size:12px">${Object.entries(S.hist).map(([k,v])=>'T'+k+': '+RANKS[v][0]).join(' · ')}</p><p style="color:${r[1]}">Rango: ${r[0]} (${S.pts} pts)</p><div class="prog"><i style="width:${S.pts%100}%"></i></div>
-<button class="pri" onclick="missions()">📋 Ver misiones</button></div>`}
-function mission(k){S.m[k]=(S.m[k]||0)+1;mev(k)}
-const pv=id=>`<div class="pv">${back(id)}${cardH({s:0,v:7},'',id)}</div>`;
-const back=(d,c='')=>`<div class="card back ${c}" style="background:${dk(d).bg}"><i>${dk(d).em}</i></div>`;
-function decks(){app.innerHTML=bar(1)+`<h2>Edición de mazo</h2><div class="grid">${DECKS.filter(d=>S.owned.includes(d.id)).map(d=>`<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><br><button ${S.deck===d.id?'disabled':''} onclick="S.deck='${d.id}';save();decks()" style="margin-top:6px">${S.deck===d.id?'Equipado':'Equipar'}</button></div>`).join('')}</div>`}
-function shop(){const it=d=>{const o=S.owned.includes(d.id);let b;if(o)b='<button disabled>Adquirido</button>';else if(d.r=='X')b='<button disabled>🔒 '+(d.id=='cam'?'Llega a Campeón':'Llega a Real')+'</button>';else if(d.r=='V'&&!halOn())b='<button disabled>Terminado</button>';else b=`<button onclick="buy('${d.id}')">${RAR[d.r][2]} 🪙</button>`;return `<div class="item">${pv(d.id)}<b>${d.n}</b><br><span class="tag" style="color:${RAR[d.r][1]}">${RAR[d.r][0]}</span><div style="margin-top:6px">${b}</div></div>`};
-app.innerHTML=bar(1)+`<h2>Tienda</h2><div class="item" style="margin-bottom:10px"><b>🎁 Sobre sorpresa — 20 🪙</b><div style="color:var(--mut);font-size:12px">Común 60% · Rara 25% · Épica 11% · Legendaria 4% (duplicado = 5 🪙)</div><button class="pri" onclick="pack()" style="margin-top:6px">Abrir sobre</button></div>
-<h2>⭐ Especiales</h2>${halOn()?`<div class="ev">🎃 Evento de Halloween · quedan ${Math.ceil((new Date(2026,9,31,23,59,59)-Date.now())/864e5)} días</div>`:''}<div class="grid">${DECKS.filter(d=>d.r=='X'||(d.r=='V'&&(halOn()||S.owned.includes(d.id)))).map(it).join('')}</div><h2>Barajas</h2><div class="grid">${DECKS.filter(d=>!'VX'.includes(d.r)).map(it).join('')}</div>`}
-function buy(id){const d=dk(id),p=RAR[d.r][2];if(d.r=='X'||(d.r=='V'&&!halOn()))return;if(S.coins<p)return toast('Monedas insuficientes');S.coins-=p;S.owned.push(id);save();toast('¡'+d.n+' conseguida!');shop()}
-function pack(){if(S.coins<20)return toast('Monedas insuficientes');S.coins-=20;let x=rnd(1,100),r=x<=60?'C':x<=85?'R':x<=96?'E':'L';const l=DECKS.filter(d=>d.r===r),d=l[rnd(0,l.length-1)];
- if(S.owned.includes(d.id)){S.coins+=5;toast('Duplicado '+d.n+': +5 🪙')}else{S.owned.push(d.id);toast('¡Nueva baraja: '+d.n+'!')}save();shop()}
-/* ---------- Lógica de reglas ---------- */
-const cnt=m=>{let c=0;while(m){c+=m&1;m>>=1}return c};
-function okGroup(g){const n=g.length;if(n<3)return false;const J=g.filter(c=>c.s<0).length;if(J>2)return false;const a=g.filter(c=>c.s>=0),m=a.length;
- if(n<=4&&new Set(a.map(c=>c.v)).size==1&&new Set(a.map(c=>c.s)).size==m)return true;
- if(new Set(a.map(c=>c.s)).size==1&&new Set(a.map(c=>c.v)).size==m){const vs=a.map(c=>c.v),mn=Math.min(...vs),mx=Math.max(...vs),need=mx-mn+1-m;if(need>J)return false;return J-need<=(mn-1)+(12-mx)}
- return false}
-function cover(h){const n=h.length,V=new Map(),memo={},by=Array.from({length:n},()=>[]);
- for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];for(let i=0;i<n;i++)if(m>>i&1)g.push(h[i]);if(okGroup(g))by[31-Math.clz32(m&-m)].push(m)}
- const f=m=>{if(!m)return 0;if(memo[m]!==undefined)return memo[m];const lo=31-Math.clz32(m&-m);let b=f(m&(m-1));for(const g of by[lo])if((g&m)===g)b=Math.max(b,cnt(g)+f(m&~g));return memo[m]=b};
- return f((1<<n)-1)}
-function pot(h){let p=0;for(let i=0;i<h.length;i++)for(let j=i+1;j<h.length;j++){const a=h[i],b=h[j];if(a.s<0||b.s<0)p+=2;else if(a.v==b.v&&a.s!=b.s)p+=1;else if(a.s==b.s&&Math.abs(a.v-b.v)<=2&&a.v!=b.v)p+=1}return p}
-const ev=(h,l)=>cover(h)*10+(l==2?pot(h):0);
-function bestDisc(h,l){let best=-1,bi=[];h.forEach((c,i)=>{const r=h.filter((_,k)=>k!=i),e=ev(r,l);if(e>best){best=e;bi=[i]}else if(e==best)bi.push(i)});return {i:bi[rnd(0,bi.length-1)],e:best}}
-/* ---------- Partida ---------- */
-let G=null;
-function search(mode){if(typeof Peer!='undefined')return mmGo(mode);let t=8;app.innerHTML=`<h1>Buscando partida…</h1><div class="sub">${mode=='rank'?'Clasificatoria':'Partida Rápida'}</div><div class="item" style="max-width:360px;margin:auto"><div style="font-size:3rem" id="tm">8</div><div>Jugadores humanos: 1/4</div><br><button onclick="clearInterval(window.ti);menu()">Cancelar</button></div>`;
- window.ti=setInterval(()=>{t--;const e=$('#tm');if(e)e.textContent=t;if(t<=0){clearInterval(window.ti);start(mode)}},1000)}
-function start(mode){const names=['Lucía','Marc','Núria','Pau','Jordi','Alba','Biel','Carla','Òscar','Mireia'];let u=names.sort(()=>Math.random()-.5);
- const pl=[{name:S.name,title:S.title?tn(S.title):'',av:AV[S.av],deck:S.deck,wins:S.wins,bot:0,hand:[]}];
- for(let i=1;i<4;i++)pl.push({name:u[i]+' (bot)',title:Math.random()<.6?['Veterano','Jugón','Aprendiz','Maestro de Mesa','Comodinero'][rnd(0,4)]:'',av:AV[rnd(0,7)],deck:DECKS[rnd(0,DECKS.length-1)].id,wins:rnd(0,300),bot:1,lvl:Math.random()<.65?1:2,hand:[]});
- let d=[];for(let s=0;s<4;s++)for(let v=1;v<=12;v++)d.push({s,v,id:d.length});for(let i=0;i<4;i++)d.push({s:-1,v:0,id:d.length});d.sort(()=>Math.random()-.5);
- if(ON&&ON.role=='h')for(let i=1;i<4;i++)if(ON.conns[i]&&ON.info[i])pl[i]=Object.assign({},ON.info[i],{bot:0,remote:1,hand:[]});
- pl.forEach(p=>{p.hand=d.splice(0,10)});G={mode,pl,draw:d,disc:[d.pop()],turn:0,ph:'draw',sel:null,over:false,tc:[0,0,0,0]};if(!ON){CH=[];chatUI()}vs()}
-const sortH=h=>h.sort((a,b)=>(a.s<0)-(b.s<0)||a.s-b.s||a.v-b.v);
-function vs(){if(!S.set.vs){sortH(G.pl[0].hand);table();next();return}const rc=mode=>G.mode=='rank'?rank()[1]:'#1f4f9a',col=rc();sortH(G.pl[0].hand);
- const pos=[['left:0;top:0','-100%,-100%'],['right:0;top:0','100%,-100%'],['left:0;bottom:0','-100%,100%'],['right:0;bottom:0','100%,100%']];
- const o=document.createElement('div');o.className='vs';o.innerHTML=pos.map((q,i)=>{const p=G.pl[i];return `<div class="p" style="${q[0]};background:${col};transform:translate(${q[1]})"><div class="in"><div style="font-size:2.2rem">${p.av}</div><b>${p.name}</b><div class="tt">${p.title?'«'+p.title+'»':''}</div><div>🏆 ${p.wins} victorias</div>${G.mode=='rank'&&!p.bot?`<div style="color:${rank()[1]}">◆ ${rank()[0]}</div>`:''}<div style="margin-top:6px">${back(p.deck)}</div></div></div>`}).join('')+'<div class="big">VS</div>';
- document.body.appendChild(o);const ps=o.querySelectorAll('.p'),big=o.querySelector('.big');
- setTimeout(()=>ps.forEach(p=>p.style.transform='translate(0,0)'),30);
- setTimeout(()=>ps.forEach(p=>p.classList.add('show')),800);
- setTimeout(()=>{big.classList.add('in');setTimeout(()=>{o.classList.add('shake')},330)},1800);
- setTimeout(()=>{ps.forEach((p,i)=>{p.style.transform=`translateY(${i<2?'-':''}120%)`;p.style.opacity=0});big.style.opacity=0;o.style.background='transparent'},2500);
- table();setTimeout(()=>{o.remove();next()},3500)}
-function cardH(c,x='',d='std',ex=''){const f=dk(d).f;if(dk(d).o.leg)x+=' leg';const st=`background:${f.bg};border-color:${f.bd};color:`;
- if(c.s<0)return `<div class="card ${x}" style="${st}${f.jk};${ex}"><span class="v">★</span><span class="s">🃏</span><span class="v2">★</span></div>`;
- return `<div class="card ${x}" style="${st}${f.ink[c.s]};${ex}"><span class="v">${VL[c.v]}</span><span class="s">${f.sym[c.s]}</span><span class="v2">${VL[c.v]}</span></div>`}
-function seat(i,a){const p=G.pl[i];return `<div class="seat ${G.turn==i&&!G.over?'act':''}" style="grid-area:${a}">${p.av} <b>${p.name}</b>${p.title?`<br><span class="tt">«${p.title}»</span>`:''}<div class="cs">${p.hand.map(()=>back(p.deck,'mini')).join('')}</div>${p.hand.length} cartas</div>`}
-let DR=null;
-function table(){if(DR!=null)return;if(ON&&ON.role=='h'&&G)setTimeout(bcast,0);const p=G.pl[0],top=G.disc[G.disc.length-1],my=G.turn==0&&!G.over,M=S.set.hint?marks(G.pl[0].hand):{},useful=!!(my&&G.ph=='draw'&&S.set.hint&&G.disc.length&&cover(G.pl[0].hand.concat(G.disc[G.disc.length-1]))>cover(G.pl[0].hand));
- let m=G.over?'Partida terminada':my?(G.ph=='draw'?'Tu turno: roba del mazo o del pozo':'Elige una carta para descartar'+(G.tc[0]<1?' (no se puede cerrar en la 1ª ronda)':'')):G.pl[G.turn].name+' está pensando…';
- let rest=G.sel!=null?p.hand.filter((_,k)=>k!=G.sel):[],can=my&&G.ph=='disc'&&G.sel!=null&&G.tc[0]>=1&&cover(rest)==10;
- app.innerHTML=`<div class="bar"><b>${G.mode=='rank'?'🏅 Clasificatoria':G.mode=='online'?'🌐 Online':'⚡ Partida Rápida'}</b><button onclick="abn()">Abandonar</button></div><div class="table">${seat(2,'top')}${seat(1,'left')}${seat(3,'right')}
- <div class="mid"><div class="pile" onclick="doDraw('d')">${back(p.deck)}<br>Mazo (${G.draw.length})</div><div class="pile" onclick="doDraw('p')">${top?cardH(top,useful?'glow':'',G.pl[0].deck):''}<br>Pozo${useful?' ✨ ¡te sirve!':''}</div></div>
- <div style="grid-area:me" class="${my?'':''}"><div class="msg">${m}<span id="tm" class="tmr"></span></div><div class="hand">${p.hand.map((c,i)=>cardH(c,(G.sel==i?'sel':'')+(M[c.id]?' '+M[c.id].cl:''),p.deck,M[c.id]?'--gc:'+M[c.id].col:'').replace('class="card',`onclick="selC(${i})" draggable="true" ondragstart="DR=${i};event.dataTransfer.setData('text','c')" ondragover="event.preventDefault()" ondrop="dropC(${i})" ondragend="DR=null;table()" class="card`)).join('')}</div>
- ${S.set.hint?'<div class="leg2">Sólido = grupo formado · Punteado = pareja que busca carta</div>':''}<div class="row"><button ${G.sel==null?'disabled':''} onclick="moveSel(-1)">◀</button><button ${G.sel==null?'disabled':''} onclick="moveSel(1)">▶</button><button onclick="sortH(G.pl[0].hand);G.sel=null;table()">Ordenar</button><button class="pri" ${my&&G.ph=='disc'&&G.sel!=null?'':'disabled'} onclick="doDiscard()">${can?'🎉 Descartar y CERRAR':'Descartar'}</button></div></div></div>`}
-function selC(i){if(!G.over){snd('pick');G.sel=G.sel==i?null:i;table()}}
-function moveSel(d){const h=G.pl[0].hand,i=G.sel,j=i+d;if(i==null||j<0||j>=h.length)return;[h[i],h[j]]=[h[j],h[i]];G.sel=j;table()}
-function dropC(j){const h=G.pl[0].hand,i=DR;DR=null;if(i==null||i==j)return table();const c=h.splice(i,1)[0];h.splice(j,0,c);G.sel=j;table()}
-function take(p,src){snd('draw');let c;if(src=='d'){if(!G.draw.length){const t=G.disc.pop();G.draw=G.disc.sort(()=>Math.random()-.5);G.disc=[t]}c=G.draw.pop()}else c=G.disc.pop();p.hand.push(c)}
-function doDraw(src){if(G.over||G.turn!=0||G.ph!='draw')return;if(ON&&ON.role=='c'){ON.conn.send({t:'draw',src});return}take(G.pl[0],src);G.ph='disc';if(S.set.auto){sortH(G.pl[0].hand);G.sel=null}table()}
-function doDiscard(){if(G.sel==null||G.over||G.turn!=0||G.ph!='disc')return;if(ON&&ON.role=='c'){ON.conn.send({t:'disc',id:G.pl[0].hand[G.sel].id});G.sel=null;return}discard(0,G.sel)}
-function discard(pi,i){snd('disc');const p=G.pl[pi],c=p.hand.splice(i,1)[0];c.d=p.deck;if(G.tc[pi]>=1&&p.hand.length==10&&cover(p.hand)==10){G.disc.push(c);return end(pi)}
- G.disc.push(c);G.tc[pi]++;if(p.bot&&Math.random()<.06)botSay(p);G.turn=(pi+1)%4;G.ph='draw';if(G.turn==0)snd('turn');if(pi==0)G.sel=null;table();next()}
-function botDisc(p){const b=bestDisc(p.hand,p.lvl),m=p.lvl==1?.35:.12;return Math.random()<(b.e>=100?m*1.5:m)?rnd(0,p.hand.length-1):b.i}
-function next(){armTimer();if(G.over||G.turn==0||(ON&&ON.role=='c'))return;const p=G.pl[G.turn];if(p.remote)return;setTimeout(()=>{if(G.over)return;
- const top=G.disc[G.disc.length-1],b=ev(p.hand,p.lvl);let useD=false;
- if(top){const h2=p.hand.concat(top);useD=(p.lvl==1?bestDisc(h2,1).e>cover(p.hand)*10:bestDisc(h2,2).e>b+4)&&Math.random()>.2}
- take(p,useD?'p':'d');table();setTimeout(()=>{if(G.over)return;discard(G.turn,botDisc(p))},rnd(1500,3500)*S.set.speed)},rnd(1500,3500)*S.set.speed)}
-function quit(){G.over=true;clearTimeout(G.tt);finish(-1)}
-function end(w){G.over=true;clearTimeout(G.tt);if(ON&&ON.role=='h')ON.conns.forEach((c,k)=>c&&c.open&&c.send({t:'end',w:(w-k+4)%4,hand:G.pl[w].hand}));G.pl.forEach(p=>{if(p.bot&&Math.random()<.5)setTimeout(()=>botSay(p,'GG'),rnd(600,2000))});finish(w)}
-function finish(w){const ranked=G.mode=='rank',won=w==0;let info='';S.games++;mission('play');
- if(won){S.wins++;S.coins+=2;mission('win');info='+2 🪙';if(G.pl[0].hand.some(c=>c.s<0))mission('joker')}
- if(ranked){const real=S.pts>=600;if(won){const d=real?10:rnd(10,20);S.pts+=d;info+=` · +${d} pts`}else{const d=real?5:rnd(3,5);S.pts=Math.max(0,S.pts-d);info+=` · −${d} pts`}}
- if(w>=0)snd(won?'win':'lose');if(ranked){mev('ranked');if(won)mev('rwin')}if(ON)mev('online');S.streak=won?S.streak+1:0;S.bs=Math.max(S.bs,S.streak);if(ranked)awardRanks();chk();save();const o=document.createElement('div');o.className='ov';
- o.innerHTML=`<div class="box"><h2>${w<0?'Has abandonado':won?'🎉 ¡Has ganado!':'Gana '+G.pl[w].name}</h2>${w>=0?`<div class="hand" style="padding-top:6px">${sortH(G.pl[w].hand).map(c=>cardH(c,'',G.pl[0].deck)).join('')}</div>`:''}<p>${info||'Sin recompensa'}</p><button class="pri" onclick="this.closest('.ov').remove();menu()">Volver al menú</button></div>`;
- document.body.appendChild(o);if(w>=0)table()}
-ap();rollSeason();menu();if(!S.tut)tut(0);
-</script></body></html>
+    <!-- Fondo Animado de Partículas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- BANNER SUPERIOR DE NAVEGACIÓN -->
+    <header class="top-header">
+        <div class="logo-title">
+            <span class="game-tag">GACHATARA</span>
+            <div id="profile-chip" class="profile-chip" title="Perfil del jugador"></div>
+        </div>
+
+        <!-- CONTADOR DE MONEDAS -->
+        <div class="currencies-bar">
+            <div class="currency-item" title="Tickets de Invocación">
+                <span class="currency-icon">🎟️</span>
+                <span id="currency-tickets" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Esquirlas Coloridas">
+                <span class="currency-icon">💎</span>
+                <span id="currency-shards" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Monedas Tara">
+                <span class="currency-icon">🪙</span>
+                <span id="currency-coins" class="currency-amount">0</span>
+            </div>
+            <div class="currency-item" title="Masterballs">
+                <span class="currency-icon"><img class="currency-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="Masterballs" onerror="this.replaceWith(document.createTextNode('🟣'))"></span>
+                <span id="currency-masterballs" class="currency-amount">0</span>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <button class="nav-tab active" onclick="switchTab('lobby', event)">Lobby</button>
+            <button class="nav-tab" onclick="switchTab('combate', event)">Combate</button>
+            <button class="nav-tab" onclick="switchTab('equipo', event)">Equipo</button>
+            <button class="nav-tab" onclick="switchTab('mochila', event)">Mochila</button>
+            <button class="nav-tab" onclick="switchTab('tienda', event)">Tienda</button>
+            <button class="nav-tab" onclick="switchTab('invocacion', event)">Invocación</button>
+            <button class="nav-tab" onclick="switchTab('dex', event)">Dex</button>
+            <a href="ajustes.html" class="nav-tab nav-link">Ajustes</a>
+        </nav>
+    </header>
+
+    <!-- ZONA CENTRAL DEL LOBBY -->
+    <main id="tab-lobby" class="lobby-container tab-content active">
+        <!-- Panel Central de Presentación -->
+        <div class="hero-frame">
+            <div class="hero-overlay"></div>
+            
+            <div class="hero-content">
+                <span class="badge-status">SISTEMA LISTO</span>
+                <h1 class="lobby-title">Gachatara</h1>
+                <p class="lobby-subtitle">Selecciona tu modo de juego para desplegar la unidad.</p>
+                
+                <!-- Botón de Combate -->
+                <div class="battle-btn-wrapper">
+                    <button class="btn-battle" onclick="switchTab('combate', event)">
+                        <span class="btn-glitch"></span>
+                        <span class="btn-text">¡A LUCHAR!</span>
+                        <span class="btn-subtext">MODO BATALLA</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ZONA DE COMBATE -->
+    <main id="tab-combate" class="lobby-container tab-content">
+        <div class="dex-frame">
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="font-family: 'Orbitron', sans-serif; color: #00f2fe; margin-bottom: 20px;">MODOS DE COMBATE</h2>
+                <div class="gacha-buttons" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-pull" onclick="startQuickBattle()">⚔️ Partida Rápida (Equipo de 3)</button>
+                    <button class="btn-pull" onclick="startStrategyBattle()">🛡️ Partida Estratégica (Equipo de 6)</button>
+                </div>
+            </div>
+
+            <!-- Contenedor dinámico de la Arena de Combate -->
+            <div id="combat-arena-container"></div>
+        </div>
+    </main>
+
+    <!-- Sección de la vista del Equipo / Inventario -->
+    <main id="tab-equipo" class="lobby-container tab-content">
+        <div class="dex-frame">
+            <div class="equipo-header">
+                <h2>GESTIÓN DE EQUIPOS Y INVENTARIO</h2>
+                <div class="equipo-stats">
+                    <span>Total capturados: <strong id="total-capturados">0</strong></span>
+                </div>
+            </div>
+
+            <!-- Selector de Modo de Equipo -->
+            <div class="team-builder-tabs" style="display: flex; gap: 10px; margin: 15px 0; justify-content: center;">
+                <button class="banner-btn active" onclick="switchTeamMode('strategy', event)">Equipo Estratégico (6)</button>
+                <button class="banner-btn" onclick="switchTeamMode('fast', event)">Equipo Rápido (3)</button>
+            </div>
+
+            <!-- Slot visual de los equipos activos -->
+            <div id="active-team-slots" style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px;">
+                <!-- Se rellenará dinámicamente -->
+            </div>
+
+            <p style="text-align: center; color: #00f2fe; font-size: 14px; margin-bottom: 10px;">💡 Haz clic en cualquier Pokémon del inventario para añadirlo o quitarlo del equipo activo.</p>
+
+            <!-- Buscador del inventario -->
+            <div class="inventory-filters" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 15px;">
+                <input id="inventory-search" type="text" placeholder="🔍 Buscar por nombre, nº o tipo..." oninput="renderInventory()" autocomplete="off"
+                    style="flex: 1 1 260px; max-width: 380px; background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 8px; padding: 9px 12px; font-size: 14px;">
+                <select id="inventory-rarity-filter" onchange="renderInventory()"
+                    style="background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 8px; padding: 9px 10px; font-size: 14px;">
+                    <option value="">Todas las rarezas</option>
+                    <option value="comun">Común</option>
+                    <option value="raro">Raro</option>
+                    <option value="epico">Épico</option>
+                    <option value="legendario">Legendario</option>
+                    <option value="secreto">Secreto / Mega</option>
+                </select>
+                <button class="banner-btn" onclick="clearInventorySearch()">Limpiar</button>
+                <span id="inventory-results-count" style="font-size: 12px; color: #94a3b8;"></span>
+            </div>
+
+            <div id="inventory-grid" class="dex-grid">
+                <!-- Las cartas guardadas se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </main>
+
+    <!-- ZONA DE TIENDA -->
+    <main id="tab-tienda" class="lobby-container tab-content">
+        <div class="dex-frame">
+            <div class="equipo-header">
+                <h2>🛒 TIENDA</h2>
+            </div>
+            <div id="shop-content"></div>
+        </div>
+    </main>
+
+    <!-- ZONA DE MOCHILA -->
+    <main id="tab-mochila" class="lobby-container tab-content">
+        <div class="dex-frame">
+            <div class="equipo-header">
+                <h2>🎒 MOCHILA</h2>
+            </div>
+            <div id="backpack-content"></div>
+        </div>
+    </main>
+
+    <!-- ZONA DE INVOCACIÓN (GACHA) -->
+    <main id="tab-invocacion" class="lobby-container tab-content">
+        <div class="gacha-frame">
+            
+            <!-- SELECTOR DE GENERACIÓN (BANNERS) -->
+            <div class="banner-selector">
+                <button id="btn-gen-1" class="banner-btn active" onclick="selectBanner(1)">Gen 1 (Kanto)</button>
+                <button id="btn-gen-2" class="banner-btn" onclick="selectBanner(2)">Gen 2 (Johto)</button>
+                <button id="btn-gen-3" class="banner-btn" onclick="selectBanner(3)">Gen 3 (Hoenn)</button>
+                <button id="btn-gen-4" class="banner-btn" onclick="selectBanner(4)">Gen 4 (Sinnoh)</button>
+                <button id="btn-gen-5" class="banner-btn" onclick="selectBanner(5)">Gen 5 (Unova)</button>
+                <button id="btn-gen-6" class="banner-btn" onclick="selectBanner(6)">Gen 6 (Kalos)</button>
+                <button id="btn-gen-7" class="banner-btn" onclick="selectBanner(7)">Gen 7 (Alola)</button>
+                <button id="btn-gen-8" class="banner-btn" onclick="selectBanner(8)">Gen 8 (Galar)</button>
+                <button id="btn-gen-9" class="banner-btn" onclick="selectBanner(9)">Gen 9 (Paldea)</button>
+            </div>
+
+            <h2 id="banner-title" class="gacha-banner-title">BANNER GENERACIÓN 1 (KANTO)</h2>
+            <p class="gacha-subtitle">¡Involucra Pokémon de todas las generaciones y Megaevoluciones Secretas!</p>
+            
+            <div class="gacha-buttons">
+                <button class="btn-pull" onclick="pullGacha(1)">Tirada x1 (1 Ticket)</button>
+                <button class="btn-pull multi" onclick="pullGacha(10)">Tirada x10 (10 Tickets)</button>
+            </div>
+
+            <!-- RESULTADOS DE TIRADAS -->
+            <div id="gacha-results" class="results-grid"></div>
+        </div>
+    </main>
+
+    <!-- ZONA DE COLECCIÓN (DEX) -->
+    <main id="tab-dex" class="lobby-container tab-content">
+        <div class="dex-frame">
+            <div class="dex-header">
+                <h2>POKÉDEX NACIONAL</h2>
+                <div class="dex-progress-wrapper">
+                    <span id="dex-counter">0 / 1074 (0%)</span>
+                    <div class="progress-bar-bg">
+                        <div id="dex-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid donde se pintan todos los Pokémon -->
+            <div id="dex-grid" class="dex-grid"></div>
+        </div>
+    </main>
+
+    <!-- Carga de Scripts en Orden Correcto -->
+    <script src="db.js"></script>
+    <script src="habilidades.js"></script>
+    <script src="gacha.js"></script>
+    <script src="game.js"></script>
+    <script src="skilltree.js"></script>
+    <script src="profile.js"></script>
+    <script src="backpack.js"></script>
+    <script src="shop.js"></script> <!-- <--- ¡AQUÍ ESTABA EL FALTANTE! -->
+    <script src="combat.js"></script>
+    <script src="modes.js"></script>
+    <script src="layout.js"></script>
+</body>
+</html>
