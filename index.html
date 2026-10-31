@@ -124,7 +124,7 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
  .card{width:38px;height:56px;padding:2px}.card .s{font-size:16px}.card .v,.card .v2{font-size:10px}.card .s svg,.card .s img{width:18px;height:18px}.back i{font-size:14px}
  .msg{font-size:11px;margin:1px 0;min-height:14px}.leg2{display:none}
  .row{margin:1px 0;gap:4px}.row button{min-height:30px;padding:3px 10px;font-size:12px}
- .hand{padding:13px 4px 6px}.hand .card{zoom:1}
+ .hand{padding:13px 4px 6px}.hand .card{zoom:var(--cs,1)}
  #chat{bottom:4px}#cb{width:34px;height:34px;font-size:15px}
 }
 @media (orientation:landscape) and (max-height:350px){.card{width:32px;height:47px}.card .s{font-size:13px}.card .v,.card .v2{font-size:9px}.card .s svg,.card .s img{width:15px;height:15px}.seat{font-size:9px}.seat .avt{--as:20px!important}.hand{padding:11px 4px 4px}.row button{min-height:26px}.msg{font-size:10px;min-height:12px;margin:0}.seat .cs{min-height:11px}}
@@ -375,7 +375,7 @@ const TS=[['¡Bienvenido a Superremigio!','Gana quien primero ordene sus <b>10 c
 ['Escaleras','3 o más cartas <b>seguidas del mismo palo</b>. El orden es 1, 2, 3, 4, 5, 6, 7, 8, 9, S, C, R y <b>después del Rey vuelve el 1</b>: la escalera puede dar la vuelta, por ejemplo C, R, 1, 2.',[[1,11],[1,12],[1,1],[1,2]]],
 ['El comodín','Un 🃏 sustituye a cualquier carta. Puedes poner <b>hasta dos por grupo</b>: con dos comodines basta <b>una sola carta real</b> para hacer un trío o una escalera.',[[0,4],[-1,0],[0,6],[2,9],[-1,0],[-1,0]]],
 ['Cómo se gana','Cuando tras descartar tus 10 cartas queden todas en grupos (por ejemplo 3+3+4), <b>cierras y ganas</b>. Ojo: <b>no se puede cerrar en la primera ronda</b>.',[[0,7],[1,7],[2,7],[3,2],[3,3],[3,4]]],
-['Modo «Al Descuento»','Partidas normales, pero por <b>rondas</b>. Al acabar cada ronda, quien no ha cerrado suma <b>un punto por cada carta sin casar</b> (quien cierra suma 0). Al llegar a <b>100 puntos</b> quedas eliminado. La partida termina cuando tres jugadores han llegado a 100: <b>gana el que no ha llegado</b>. No cuenta para el ranking.',[[0,2],[1,2],[2,2]]],
+['Modo «Al Descuento»','Partidas normales, pero por <b>rondas</b>. Al acabar cada ronda, quien no ha cerrado suma <b>el valor de cada carta sin casar</b>: del 1 al 7 su número, Sota 10, Caballo 11, Rey 12 y comodín 25 (quien cierra suma 0). Al llegar a <b>100 puntos</b> quedas eliminado. La partida termina cuando tres jugadores han llegado a 100: <b>gana el que no ha llegado</b>. No cuenta para el ranking.',[[0,2],[1,2],[2,2]]],
 ['Ayudas y tiempo','Subrayado <b>sólido de color</b> = grupo ya formado. Subrayado <b>punteado</b> = pareja que busca una carta. Si la carta del pozo te sirve, brilla en verde. Tienes <b>60 segundos por turno</b>. Reordena tus cartas arrastrando o con ◀ ▶, y usa 💬 para el chat. Puedes desactivar las ayudas y el sonido en Ajustes.',[[2,5],[2,6]]]];
 function tut(i=0){const T=TS[i];let o=$('#tut');if(!o){o=document.createElement('div');o.id='tut';o.className='ov';document.body.appendChild(o)}
  o.innerHTML=`<div class="box"><div class="sub">Tutorial ${i+1}/${TS.length}</div><h2>${T[0]}</h2><div class="row" style="margin:10px 0">${T[2].map(c=>c=='B'?back(S.deck):cardH({s:c[0],v:c[1]},'',S.deck)).join('')}</div><p style="text-align:left">${T[1]}</p><div class="row">${i?`<button onclick="tut(${i-1})">←</button>`:''}${i<TS.length-1?`<button class="pri" onclick="tut(${i+1})">Siguiente</button>`:'<button class="pri" onclick="tutEnd()">¡A jugar!</button>'}<button onclick="tutEnd()">Saltar</button></div></div>`}
@@ -611,6 +611,12 @@ function cover(h){const n=h.length,V=new Map(),memo={},by=Array.from({length:n},
  for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];for(let i=0;i<n;i++)if(m>>i&1)g.push(h[i]);if(okGroup(g))by[31-Math.clz32(m&-m)].push(m)}
  const f=m=>{if(!m)return 0;if(memo[m]!==undefined)return memo[m];const lo=31-Math.clz32(m&-m);let b=f(m&(m-1));for(const g of by[lo])if((g&m)===g)b=Math.max(b,cnt(g)+f(m&~g));return memo[m]=b};
  return f((1<<n)-1)}
+
+const JKP=25,cvl=c=>c.s<0?JKP:c.v;
+function unVal(h){const n=h.length,vs=h.map(cvl),tot=vs.reduce((a,b)=>a+b,0),by=Array.from({length:n},()=>[]),memo={},mv={};
+ for(let m=7;m<(1<<n);m++){if(cnt(m)<3)continue;const g=[];let v=0;for(let i=0;i<n;i++)if(m>>i&1){g.push(h[i]);v+=vs[i]}if(okGroup(g)){by[31-Math.clz32(m&-m)].push(m);mv[m]=v}}
+ const f=m=>{if(!m)return 0;if(memo[m]!==undefined)return memo[m];const lo=31-Math.clz32(m&-m);let b=f(m&(m-1));for(const g of by[lo])if((g&m)===g)b=Math.max(b,mv[g]+f(m&~g));return memo[m]=b};
+ return tot-f((1<<n)-1)}
 function pot(h){let p=0;for(let i=0;i<h.length;i++)for(let j=i+1;j<h.length;j++){const a=h[i],b=h[j];if(a.s<0||b.s<0)p+=2;else if(a.v==b.v)p+=1;else if(a.s==b.s&&dv(a.v,b.v)<=2&&a.v!=b.v)p+=1}return p}
 const ev=(h,l)=>cover(h)*10+(l==2?pot(h):0);
 function bestDisc(h,l){let best=-1,bi=[];h.forEach((c,i)=>{const r=h.filter((_,k)=>k!=i),e=ev(r,l);if(e>best){best=e;bi=[i]}else if(e==best)bi.push(i)});return {i:bi[rnd(0,bi.length-1)],e:best}}
@@ -642,7 +648,7 @@ let DR=null;
 function table(){table0();fitHand()}
 function table0(){if(DR!=null)return;if(ON&&ON.role=='h'&&G)setTimeout(bcast,0);const p=G.pl[0],top=G.disc[G.disc.length-1],my=!G.spec&&G.turn==0&&!G.over,M=S.set.hint&&!G.spec?marks(G.pl[0].hand):{},useful=!!(my&&G.ph=='draw'&&S.set.hint&&G.disc.length&&cover(G.pl[0].hand.concat(G.disc[G.disc.length-1]))>cover(G.pl[0].hand));
  let m=G.over?'Partida terminada':my?(G.ph=='draw'?'Tu turno: roba del mazo o del pozo':'Elige una carta para descartar'+(G.tc[0]<1?' (no se puede cerrar en la 1ª ronda)':'')):G.pl[G.turn].name+' está pensando…';
- if(G.spec)m='👁 Estás viendo la partida de '+G.pl[0].name;else if(G.mode=='desc'&&G.sc){if(G.sc[0]>=100)m='🚫 Estás eliminado · sigues viendo la partida';else if(!G.over)m+=' · Sin casar: '+Math.max(0,p.hand.length-cover(p.hand))}
+ if(G.spec)m='👁 Estás viendo la partida de '+G.pl[0].name;else if(G.mode=='desc'&&G.sc){if(G.sc[0]>=100)m='🚫 Estás eliminado · sigues viendo la partida';else if(!G.over)m+=' · Puntos sin casar: '+unVal(p.hand)}
  let rest=G.sel!=null?p.hand.filter((_,k)=>k!=G.sel):[],can=my&&G.ph=='disc'&&G.sel!=null&&G.tc[0]>=1&&cover(rest)==10;
  app.innerHTML=`<div class="bar"><b>${G.mode=='rank'?'🏅 Clasificatoria':G.mode=='online'?'🌐 Online':G.mode=='desc'?'📉 Al Descuento · Ronda '+G.round+' · tú: '+G.sc[0]+'/100':'⚡ Partida Rápida'}</b>${spN()?`<span class="eye">👁 ${spN()}</span>`:''}<button onclick="abn()">${G.spec?'Salir':'Abandonar'}</button></div><div class="table">${seat(2,'top')}${seat(1,'left')}${seat(3,'right')}
  <div class="mid"><div class="pile" onclick="doDraw('d')">${back(p.deck)}<br>Mazo (${G.draw.length})</div><div class="pile" onclick="doDraw('p')">${top?cardH(top,useful?'glow':'',G.pl[0].deck):''}<br>Pozo${useful?' ✨ ¡te sirve!':''}</div></div>
@@ -667,7 +673,7 @@ const scoreTbl=w=>`<div style="text-align:left;margin:8px 0">${G.pl.map((p,i)=>(
 function showRound(add,w){const o0=$('#rsum');o0&&o0.remove();const o=document.createElement('div');o.id='rsum';o.className='ov';
  o.innerHTML=`<div class="box"><h2>📉 Fin de la ronda ${G.round||1}</h2><p>${G.pl[w]?G.pl[w].name:'Alguien'} ha cerrado.</p>${G.pl.map((p,i)=>`<div class="set"><span>${p.name}${G.sc[i]>=100?' · 🚫 eliminado':''}</span><span>${i==0?(add[0]?'+'+add[0]:'—')+' → ':''}<b>${G.sc[i]}</b>/100</span></div>`).join('')}<p class="sub">La siguiente ronda empieza enseguida…</p></div>`;document.body.appendChild(o)}
 function roundEnd(w){G.over=true;clearTimeout(G.tt);const R=(a,k)=>a.map((_,j)=>a[(k+j)%4]);
- const add=G.pl.map((p,i)=>G.out[i]||i==w?0:Math.max(0,p.hand.length-cover(p.hand)));
+ const add=G.pl.map((p,i)=>G.out[i]||i==w?0:unVal(p.hand));
  add.forEach((a,i)=>{G.sc[i]+=a;if(G.sc[i]>=100)G.out[i]=true});
  const alive=G.out.map((o,i)=>o?-1:i).filter(i=>i>=0);
  if(alive.length<=1){const win=alive.length?alive[0]:G.sc.indexOf(Math.min(...G.sc));
