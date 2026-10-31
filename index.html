@@ -124,7 +124,7 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
  .card{width:38px;height:56px;padding:2px}.card .s{font-size:16px}.card .v,.card .v2{font-size:10px}.card .s svg,.card .s img{width:18px;height:18px}.back i{font-size:14px}
  .msg{font-size:11px;margin:1px 0;min-height:14px}.leg2{display:none}
  .row{margin:1px 0;gap:4px}.row button{min-height:30px;padding:3px 10px;font-size:12px}
- .hand{padding:13px 4px 6px}.hand .card{zoom:var(--cs,1)}
+ .hand{padding:13px 4px 6px}.hand .card{zoom:var(--csl,var(--cs,1))}
  #chat{bottom:4px}#cb{width:34px;height:34px;font-size:15px}
 }
 @media (orientation:landscape) and (max-height:350px){.card{width:32px;height:47px}.card .s{font-size:13px}.card .v,.card .v2{font-size:9px}.card .s svg,.card .s img{width:15px;height:15px}.seat{font-size:9px}.seat .avt{--as:20px!important}.hand{padding:11px 4px 4px}.row button{min-height:26px}.msg{font-size:10px;min-height:12px;margin:0}.seat .cs{min-height:11px}}
@@ -233,7 +233,8 @@ function titles(){const ss=S.season||0,own=id=>S.titles.includes(id),cmp=id=>/^(
 <p class="sub">Los de rango se ganan durante la temporada, cada vez que subes. Los de victorias cuentan todas tus partidas clasificatorias ganadas. Al terminar cada temporada, los 10 mejores del ranking reciben además un título y monedas: puesto 1 «Campeón» (+300 🪙), 2-3 «Podio» (+150 🪙) y 4-10 «Élite» (+75 🪙).</p>
 <h2>🎖️ Generales <small style="color:var(--mut)">(${cnt(gen)})</small></h2><div class="grid">${draw(gen)}</div>`}
 const ask=(m,f)=>{window._ask=f;const o=document.createElement('div');o.className='ov';o.innerHTML=`<div class="box"><p>${m}</p><div class="row"><button class="pri" onclick="const f=_ask;this.closest('.ov').remove();f()">Aceptar</button><button onclick="this.closest('.ov').remove()">Cancelar</button></div></div>`;document.body.appendChild(o)};
-const ap=()=>{if(!dk(S.deck))S.deck='std';const r=document.documentElement.style,b=bgd(S.bg);r.setProperty('--cs',S.set.size);r.setProperty('--tb',b.t);r.setProperty('--pg',b.p);r.setProperty('--tbd',b.bd)};
+const LZ=()=>{const z=+S.set.size||1;return z>1?1+(z-1)*3:z},effZ=()=>matchMedia('(orientation:landscape) and (max-height:560px)').matches?LZ():(+S.set.size||1);
+const ap=()=>{if(!dk(S.deck))S.deck='std';const r=document.documentElement.style,b=bgd(S.bg);r.setProperty('--cs',S.set.size);r.setProperty('--csl',LZ());r.setProperty('--tb',b.t);r.setProperty('--pg',b.p);r.setProperty('--tbd',b.bd)};
 const seg=(k,o)=>`<div class="seg">${o.map(([l,v])=>`<button class="${S.set[k]==v?'on':''}" onclick="S.set.${k}=${v};save();ap();settings()">${l}</button>`).join('')}</div>`;
 const enc=()=>btoa(unescape(encodeURIComponent(JSON.stringify(S))));
 function cp(){const e=$('#sv');e.select();const ok=()=>toast('Código copiado');try{navigator.clipboard.writeText(e.value).then(ok,()=>{document.execCommand('copy');ok()})}catch(x){document.execCommand('copy');ok()}}
@@ -469,10 +470,10 @@ function delReq(rid,back){FQ().doc(rid).delete().then(()=>{toast('Hecho');back?o
 function setPhoto(inp){const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),n=96;c.width=c.height=n;const m=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,n,n);S.photo=c.toDataURL('image/jpeg',.7);save();toast('Foto actualizada');profile()};im.onerror=()=>toast('No se pudo leer la imagen');im.src=r.result};r.readAsDataURL(f)}
 /* ---- táctil: arrastrar cartas, mano compacta, doble toque para descartar ---- */
 let PD=null,DROPPED=0,LT={i:-1,t:0};
-function fitHand(){const h=document.querySelector('.hand');if(!h)return;const cs=h.querySelectorAll('.card');if(cs.length<2)return;const z=+S.set.size||1,W=h.clientWidth-12,cw=cs[0].getBoundingClientRect().width,n=cs.length,ov=n*cw>W?(W-n*cw)/(n-1):4;cs.forEach((c,i)=>{c.style.marginLeft=i?(ov/z)+'px':'0'})}
+function fitHand(){const h=document.querySelector('.hand');if(!h)return;const cs=h.querySelectorAll('.card');if(cs.length<2)return;const z=effZ(),W=h.clientWidth-12,cw=cs[0].getBoundingClientRect().width,n=cs.length,ov=n*cw>W?(W-n*cw)/(n-1):4;cs.forEach((c,i)=>{c.style.marginLeft=i?(ov/z)+'px':'0'})}
 window.addEventListener('resize',fitHand);
 document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('.hand .card[data-i]');if(!c||!G||G.over)return;PD={i:+c.dataset.i,x:e.clientX,el:c,moved:false,rects:[...document.querySelectorAll('.hand .card[data-i]')].map(k=>k.getBoundingClientRect())}});
-document.addEventListener('pointermove',e=>{if(!PD)return;const dx=e.clientX-PD.x;if(!PD.moved&&Math.abs(dx)<12)return;if(!PD.moved){PD.moved=true;DR=PD.i;try{PD.el.setPointerCapture(e.pointerId)}catch(x){}}PD.el.style.transition='none';PD.el.style.zIndex=60;PD.el.style.transform='translate('+(dx/(+S.set.size||1))+'px,-18px)'});
+document.addEventListener('pointermove',e=>{if(!PD)return;const dx=e.clientX-PD.x;if(!PD.moved&&Math.abs(dx)<12)return;if(!PD.moved){PD.moved=true;DR=PD.i;try{PD.el.setPointerCapture(e.pointerId)}catch(x){}}PD.el.style.transition='none';PD.el.style.zIndex=60;PD.el.style.transform='translate('+(dx/effZ())+'px,-18px)'});
 document.addEventListener('pointerup',e=>{if(!PD)return;const d=PD;PD=null;if(!d.moved)return;DROPPED=Date.now();DR=null;let j=d.rects.length;for(let k=0;k<d.rects.length;k++){if(e.clientX<d.rects[k].left+d.rects[k].width/2){j=k;break}}
  const h=G.pl[0].hand;if(d.i>=h.length)return table();const ins=j>d.i?j-1:j,c=h.splice(d.i,1)[0];h.splice(ins,0,c);G.sel=ins;snd('pick');table()});
 document.addEventListener('pointercancel',()=>{if(PD){PD=null;DR=null;table()}});
